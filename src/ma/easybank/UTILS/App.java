@@ -211,7 +211,7 @@ public class App {
                 //changeAccountState();
                 break;
             case 21:
-                //getAllMissions();
+                getAllMissions();
                 break;
             case 22:
                 //assign();
@@ -825,6 +825,16 @@ public class App {
         System.out.println("--------------------------------------------------------------------");
     }
 
+    public static void getAllMissions(){
+
+        System.out.println("----------------------Toutes les missions--------------------------");
+
+        displayMissions(MissionDAOImpl.findAll(missionService));
+
+        System.out.println("-----------------------------------------------------------------");
+
+    }
+
 
 
 
@@ -933,6 +943,18 @@ public class App {
         System.out.println("-------------------------------------------------------");
         System.out.println(mission);
         System.out.println("-------------------------------------------------------");
+    }
+
+    public static void displayMissions(List<Mission> missions){
+        if(missions==null || missions.isEmpty()){
+            System.out.println("Rien à afficher");
+        }else{
+            for (Mission mission : missions) {
+
+                System.out.println(mission);
+
+            }
+        }
     }
 
 
