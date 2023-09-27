@@ -20,9 +20,9 @@ public class AccountService {
 
     private static final String FIND_SAVINGS_ACCOUNTS_CLIENT = "SELECT * FROM (SELECT accounts.nbr,accounts.balance,accounts.crtndate,accounts.state,accounts.idclient,accounts.createdby,savingsaccnt.interestrate FROM accounts INNER JOIN savingsaccnt ON accounts.nbr = savingsaccnt.accnbr) AS SR WHERE SR.idclient=?";
 
-    private static final String FIND_SAVINGS_ACCOUNTS = "SELECT accounts.nbr,accounts.balance,accounts.crtndate,accounts.state,accounts.idclient,accounts.createdby,savingsaccnt.interestrate FROM accounts INNER JOIN savingsaccnt ON accounts.nbr = savingsaccnt.accnbr";
+    private static final String FIND_SAVINGS_ACCOUNTS = "SELECT accounts.nbr,accounts.balance,accounts.crtndate,accounts.state,accounts.idclient,accounts.createdby,savingsaccnt.interestrate FROM accounts INNER JOIN savingsaccnt ON accounts.nbr = savingsaccnt.accnbr where accounts.deleted!=true";
 
-    private static final String FIND_CURRENT_ACCOUNTS = "SELECT accounts.nbr,accounts.balance,accounts.crtndate,accounts.state,accounts.idclient,accounts.createdby,currentaccnt.overdraft FROM accounts INNER JOIN currentaccnt ON accounts.nbr = currentaccnt.accnbr";
+    private static final String FIND_CURRENT_ACCOUNTS = "SELECT accounts.nbr,accounts.balance,accounts.crtndate,accounts.state,accounts.idclient,accounts.createdby,currentaccnt.overdraft FROM accounts INNER JOIN currentaccnt ON accounts.nbr = currentaccnt.accnbr where accounts.deleted!=true";
 
     private static final String CHANGE_STATE = "update accounts set state=? where nbr=?";
 

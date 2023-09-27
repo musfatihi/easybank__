@@ -7,10 +7,7 @@ import ma.easybank.DTO.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 
@@ -220,7 +217,7 @@ public class App {
                 //deleteAssignment();
                 break;
             case 24:
-                //getAllAccountsByState();
+                getAllAccountsByState();
                 break;
             case 25:
                 //getAllAccountsByDate();
@@ -671,6 +668,28 @@ public class App {
 
         System.out.println("--------------------------------------------------------------------");
 
+
+    }
+
+    public static void getAllAccountsByState(){
+
+        System.out.println("---------------------------------Tous les comptes------------------------------");
+
+        Map<String,List<Account>> accounts = AccountDAOImpl.findAllByState(accountService);
+
+        System.out.println("----------------------------------Comptes Actifs-------------------------------");
+
+        displayAccounts(accounts.get("Active"));
+
+        System.out.println("----------------------------------Comptes Bloqués------------------------------");
+
+        displayAccounts(accounts.get("Blocked"));
+
+        System.out.println("----------------------------------Comptes Supprimés-----------------------------");
+
+        displayAccounts(accounts.get("Deleted"));
+
+        System.out.println("---------------------------------------------------------------------------------");
 
     }
 
