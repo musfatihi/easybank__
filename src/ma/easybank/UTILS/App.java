@@ -220,7 +220,7 @@ public class App {
                 getAllAccountsByState();
                 break;
             case 25:
-                //getAllAccountsByDate();
+                getAllAccountsByDate();
                 break;
             case 26:
                 //getAsnmntsHistoryByEmpl();
@@ -688,6 +688,19 @@ public class App {
         System.out.println("----------------------------------Comptes Supprimés-----------------------------");
 
         displayAccounts(accounts.get("Deleted"));
+
+        System.out.println("---------------------------------------------------------------------------------");
+
+    }
+
+    public static void getAllAccountsByDate(){
+
+        System.out.println("---------------------------------Tous les comptes par date------------------------------");
+
+        AccountDAOImpl.findAllByDate(accountService).forEach((crnDate, accounts) -> {
+            System.out.println("Date: " + Helpers.localDateToStr(crnDate)+"\n");
+            accounts.forEach(account -> System.out.println(account));
+        });
 
         System.out.println("---------------------------------------------------------------------------------");
 

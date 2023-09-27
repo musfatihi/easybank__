@@ -6,6 +6,7 @@ import ma.easybank.DTO.Account;
 import ma.easybank.DTO.Client;
 import ma.easybank.DTO.State;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,6 +98,41 @@ public class AccountDAOImpl implements AccountDAO {
         }
 
         return combinedMap;
+    }
+
+    public static Map<LocalDate, List<Account>> combineMapsDate(Map<LocalDate, List<Account>> map1, Map<LocalDate, List<Account>> map2) {
+        Map<LocalDate, List<Account>> combinedMap = new HashMap<>();
+
+        // Add all entries from map1 to combinedMap
+        combinedMap.putAll(map1);
+
+        // Merge entries from map2 into combinedMap
+        for (Map.Entry<LocalDate, List<Account>> entry : map2.entrySet()) {
+            LocalDate key = entry.getKey();
+            List<Account> values = entry.getValue();
+
+            // If the key already exists in combinedMap, append the values
+            if (combinedMap.containsKey(key)) {
+                combinedMap.get(key).addAll(values);
+            }
+            // If the key is not in combinedMap, add it with the values from map2
+            else {
+                combinedMap.put(key, new ArrayList<>(values));
+            }
+        }
+
+        return combinedMap;
+    }
+
+    public static Map<LocalDate, List<Account>> findAllByDate(AccountService accountService) {
+
+        Map<LocalDate, List<Account>> currentaccnt = accountService.findAllAccounts().get("current").stream()
+                .collect(Collectors.groupingBy(Account::getCrtnDate));
+
+        Map<LocalDate, List<Account>> savingsaccnt = accountService.findAllAccounts().get("savings").stream()
+                .collect(Collectors.groupingBy(Account::getCrtnDate));
+
+        return combineMapsDate(currentaccnt,savingsaccnt);
     }
 
 }
