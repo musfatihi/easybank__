@@ -7,6 +7,7 @@ import ma.easybank.DTO.Client;
 import ma.easybank.DTO.State;
 
 import java.util.List;
+import java.util.Map;
 
 public class AccountDAOImpl implements AccountDAO {
 
@@ -26,6 +27,12 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public Boolean delete(Account account) {
         return accountService.deleteAccount(account);
+    }
+
+    public static Map<String, List<Account>> findAll(AccountService accountService){
+
+        return accountService.findAllAccounts();
+
     }
 
     @Override

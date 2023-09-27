@@ -205,7 +205,7 @@ public class App {
                 //findClients();
                 break;
             case 19:
-                //getAllAccounts();
+                getAllAccounts();
                 break;
             case 20:
                 //changeAccountState();
@@ -616,6 +616,20 @@ public class App {
 
         System.out.println("--------------------------------------------------------------------");
 
+    }
+
+    public static void getAllAccounts(){
+        System.out.println("----------------------Tous les comptes--------------------------");
+
+        System.out.println("----------------------Les comptes courants--------------------------");
+
+        displayAccounts(AccountDAOImpl.findAll(accountService).get("current"));
+
+        System.out.println("----------------------Les comptes d'epargne--------------------------");
+
+        displayAccounts(AccountDAOImpl.findAll(accountService).get("savings"));
+
+        System.out.println("-----------------------------------------------------------------");
     }
 
 
