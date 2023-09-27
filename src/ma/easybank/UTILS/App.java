@@ -196,7 +196,7 @@ public class App {
                 getAllEmployees();
                 break;
             case 16:
-                //findEmployees();
+                findEmployees();
                 break;
             case 17:
                 //getAllClients();
@@ -360,6 +360,261 @@ public class App {
         System.out.println("-----------------------------------------------------------------");
 
     }
+
+    public static void findEmployees() {
+
+        System.out.println("----------------------Chercher un Employé--------------------------");
+
+        String[] fields = {"Prenom", "Nom", "Date de naissance", "Adresse", "Numero de Tel", "Date de recrutement", "Adresse mail"};
+
+        showOptions(fields);
+
+        int choice = takeInput(1, fields.length);
+
+        switch (choice) {
+
+            case 1:
+                findEmployeesByFirstName();
+                break;
+            case 2:
+                findEmployeesByLastName();
+                break;
+            case 3:
+                findEmployeesByBirthDate();
+                break;
+            case 4:
+                findEmployeesByAddress();
+                break;
+            case 5:
+                findEmployeesByPhoneNbr();
+                break;
+            case 6:
+                findEmployeesByRcrtmntDate();
+                break;
+            case 7:
+                findEmployeesByMailAddress();
+                break;
+            default:
+                break;
+        }
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void findEmployeesByFirstName(){
+
+        System.out.println("----------------------Chercher un Employé par prénom--------------------------");
+
+        String[] fields = {"Prenom"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Prenom")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByFirstName(filledFields.get("Prenom"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+
+    }
+
+    public static void findEmployeesByLastName(){
+
+        System.out.println("----------------------Chercher un Employé par nom--------------------------");
+
+        String[] fields = {"Nom"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Nom")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByLastName(filledFields.get("Nom"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+
+    }
+
+    public static void findEmployeesByAddress(){
+
+        System.out.println("----------------------Chercher un Employé par Adresse--------------------------");
+
+        String[] fields = {"Adresse"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Adresse")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByAddress(filledFields.get("Adresse"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void findEmployeesByPhoneNbr(){
+
+        System.out.println("----------------------Chercher un Employé par Numéro de Tél--------------------------");
+
+        String[] fields = {"N TEL"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("N TEL")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByPhoneNbr(filledFields.get("N TEL"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+    }
+
+    public static void findEmployeesByMailAddress(){
+
+        System.out.println("----------------------Chercher un Employé par Adresse Mail--------------------------");
+
+        String[] fields = {"E-MAIL"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        //Objects Creation
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("E-MAIL")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByMailAdrs(filledFields.get("E-MAIL"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void findEmployeesByBirthDate(){
+
+        System.out.println("----------------------Chercher un Employé par date de naissance--------------------------");
+
+        String[] fields = {"Date de naissance"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        //Objects Creation
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Date de naissance")){
+                attribut.setMandatory();
+                attribut.setType("date");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        displayEmployees(EmployeeDAOImpl.findByBirthDate(filledFields.get("Date de naissance"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void findEmployeesByRcrtmntDate(){
+
+        System.out.println("----------------------Chercher un Employé par date de recrutement--------------------------");
+
+        String[] fields = {"Date de recrutement"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        //Objects Creation
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Date de recrutement")){
+                attribut.setMandatory();
+                attribut.setType("date");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        displayEmployees(EmployeeDAOImpl.findByRcrtmntDate(filledFields.get("Date de recrutement"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+
+
 
 
     //-------------------------------------------------Clients-------------------------------
@@ -902,6 +1157,8 @@ public class App {
 
     public static void displayEmployees(List<Employee> employees){
 
+        System.out.println("-------------------------------------------------------");
+
         if(employees==null || employees.isEmpty()){
             System.out.println("Rien à Afficher");
         }
@@ -909,6 +1166,8 @@ public class App {
         for (Employee employee : employees) {
             System.out.println(employee);
         }
+
+        System.out.println("-------------------------------------------------------");
 
     }
 
