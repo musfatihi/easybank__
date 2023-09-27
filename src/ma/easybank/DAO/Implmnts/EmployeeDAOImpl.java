@@ -4,6 +4,7 @@ import ma.easybank.DAO.Intrfcs.EmployeeDAO;
 import ma.easybank.DAO.Services.EmployeeService;
 import ma.easybank.DTO.Employee;
 
+import java.util.List;
 import java.util.Optional;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
@@ -23,9 +24,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public Optional<Employee> findBy(Employee employee) {
         return employeeService.findEmployeeByMtrcl(employee.getMtrcltNbr());
     }
-
     @Override
     public Boolean delete(Employee employee) {
         return employeeService.deleteEmployee(employee);
+    }
+
+    public static List<Employee> findAll(EmployeeService employeeService){
+        return employeeService.findAllEmployees();
     }
 }

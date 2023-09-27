@@ -193,7 +193,7 @@ public class App {
                 deleteMission();
                 break;
             case 15:
-                //getAllEmployees();
+                getAllEmployees();
                 break;
             case 16:
                 //findEmployees();
@@ -348,6 +348,16 @@ public class App {
         }
 
         System.out.println("--------------------------------------------------------------------");
+
+    }
+
+    public static void getAllEmployees(){
+
+        System.out.println("----------------------Tous les employés--------------------------");
+
+        displayEmployees(EmployeeDAOImpl.findAll(employeeService));
+
+        System.out.println("-----------------------------------------------------------------");
 
     }
 
@@ -888,6 +898,18 @@ public class App {
         System.out.println("-------------------------------------------------------");
         System.out.println(employee);
         System.out.println("-------------------------------------------------------");
+    }
+
+    public static void displayEmployees(List<Employee> employees){
+
+        if(employees==null || employees.isEmpty()){
+            System.out.println("Rien à Afficher");
+        }
+
+        for (Employee employee : employees) {
+            System.out.println(employee);
+        }
+
     }
 
     //---------------------------------------------Client--------------------------------

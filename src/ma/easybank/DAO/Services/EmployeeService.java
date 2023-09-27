@@ -5,6 +5,8 @@ import ma.easybank.DTO.Employee;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class EmployeeService {
@@ -16,6 +18,9 @@ public class EmployeeService {
     private static final String DELETE_EMPLOYEE = "update employees set deleted=true where mtrcltNbr=?";
 
     private static final String FIND_EMPLOYEE_MTRCL = "select * from employees where mtrcltNbr=?";
+
+    private static final String FIND_ALL_EMPLOYEES = "select * from employees where deleted!=true";
+
 
 
 
@@ -107,6 +112,38 @@ public class EmployeeService {
         }
 
         return Optional.empty();
+
+    }
+
+
+    //Find All Employees
+    public List<Employee> findAllEmployees() {
+
+        List<Employee> employees = new ArrayList<>();
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(FIND_ALL_EMPLOYEES, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                Employee employee = new Employee(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3), resultSet.getDate(4).toLocalDate(),resultSet.getString(5),resultSet.getString(6),resultSet.getDate(7).toLocalDate(),resultSet.getString(8));
+
+                employees.add(employee);
+
+            }
+
+        }
+        catch(Exception e){
+
+            System.out.println(e);
+
+        }
+
+        return employees;
 
     }
 
