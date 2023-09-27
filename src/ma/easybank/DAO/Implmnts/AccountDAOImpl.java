@@ -35,8 +35,7 @@ public class AccountDAOImpl implements AccountDAO {
 
     }
 
-    @Override
-    public Boolean changeState(Account account, State state) {
-        return null;
+    public static Boolean changeState(Account account, State state,AccountService accountService) {
+        return accountService.changeState(account,state.toString());
     }
 }

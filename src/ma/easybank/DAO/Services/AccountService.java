@@ -24,6 +24,7 @@ public class AccountService {
 
     private static final String FIND_CURRENT_ACCOUNTS = "SELECT accounts.nbr,accounts.balance,accounts.crtndate,accounts.state,accounts.idclient,accounts.createdby,currentaccnt.overdraft FROM accounts INNER JOIN currentaccnt ON accounts.nbr = currentaccnt.accnbr";
 
+    private static final String CHANGE_STATE = "update accounts set state=? where nbr=?";
 
     //Constructor
     public AccountService(Connection connection) {
@@ -108,7 +109,7 @@ public class AccountService {
 
     }
 
-    //Get All Accounts
+    //Find All Accounts
     public Map<String, List<Account>> findAllAccounts() {
 
 
@@ -158,6 +159,30 @@ public class AccountService {
         }
 
         return accounts;
+
+    }
+
+    public Boolean changeState(Account account,String state){
+
+        int rowsUpdated = 0;
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(CHANGE_STATE);
+
+            stmt.setString(1,state);
+            stmt.setInt(2,account.getNbr());
+
+            rowsUpdated = stmt.executeUpdate();
+
+        }
+        catch (Exception e) {
+
+            System.out.println(e);
+
+        }
+
+        return rowsUpdated>0;
 
     }
 

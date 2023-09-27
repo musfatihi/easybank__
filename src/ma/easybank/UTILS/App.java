@@ -208,7 +208,7 @@ public class App {
                 getAllAccounts();
                 break;
             case 20:
-                //changeAccountState();
+                changeAccountState();
                 break;
             case 21:
                 //getAllMissions();
@@ -630,6 +630,48 @@ public class App {
         displayAccounts(AccountDAOImpl.findAll(accountService).get("savings"));
 
         System.out.println("-----------------------------------------------------------------");
+    }
+
+    public static void changeAccountState(){
+
+        System.out.println("----------------------Changement de status d'un Compte--------------------------");
+
+        String[] fields = {"Numero de compte","Active or Blocked"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Numero de compte")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+            if(field.equals("Active or Blocked")){
+                attribut.setType("state");
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Account account = new Account(Integer.valueOf(filledFields.get("Numero de compte")));
+
+        if(AccountDAOImpl.changeState(account,State.valueOf(filledFields.get("Active or Blocked")),accountService))
+        {
+            Helpers.displaySuccessMsg("L'état de compte a été modifié avec succès");
+        }else{
+            Helpers.displayErrorMsg("Aucun compte avec ce numèro!!");
+        }
+
+        System.out.println("--------------------------------------------------------------------");
+
+
     }
 
 
