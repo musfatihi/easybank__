@@ -2,9 +2,9 @@ package ma.easybank.DAO.Implmnts;
 
 import ma.easybank.DAO.Intrfcs.ClientDAO;
 import ma.easybank.DAO.Services.ClientService;
-import ma.easybank.DAO.Services.EmployeeService;
 import ma.easybank.DTO.Client;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ClientDAOImpl implements ClientDAO {
@@ -29,5 +29,10 @@ public class ClientDAOImpl implements ClientDAO {
     public Boolean delete(Client client) {
         return clientService.deleteClient(client);
     }
+
+    public static List<Client> findAll(ClientService clientService) {
+        return clientService.findAllClients();
+    }
+
 
 }

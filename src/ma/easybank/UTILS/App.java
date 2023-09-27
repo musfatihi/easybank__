@@ -199,7 +199,7 @@ public class App {
                 //findEmployees();
                 break;
             case 17:
-                //getAllClients();
+                getAllClients();
                 break;
             case 18:
                 //findClients();
@@ -465,6 +465,16 @@ public class App {
         }
 
         System.out.println("--------------------------------------------------------------------");
+
+    }
+
+    public static void getAllClients(){
+
+        System.out.println("----------------------Tous les clients--------------------------");
+
+        displayClients(ClientDAOImpl.findAll(clientService));
+
+        System.out.println("-----------------------------------------------------------------");
 
     }
 
@@ -895,6 +905,24 @@ public class App {
         System.out.println("-------------------------------------------------------");
         System.out.println(client);
         System.out.println("-------------------------------------------------------");
+    }
+
+    public static void displayClients(List<Client> clients){
+
+        System.out.println("-------------------------------------------------------");
+
+        if(clients==null || clients.isEmpty()){
+            System.out.println("Rien à Afficher");
+        }
+
+        for (Client client : clients) {
+
+            System.out.println(client);
+
+        }
+
+        System.out.println("-------------------------------------------------------");
+
     }
 
     //------------------------------------------Compte------------------------------------
