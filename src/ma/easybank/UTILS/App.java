@@ -199,10 +199,10 @@ public class App {
                 findEmployees();
                 break;
             case 17:
-                //getAllClients();
+                getAllClients();
                 break;
             case 18:
-                //findClients();
+                findClients();
                 break;
             case 19:
                 //getAllAccounts();
@@ -733,6 +733,191 @@ public class App {
 
     }
 
+    public static void getAllClients(){
+
+        System.out.println("----------------------Tous les clients--------------------------");
+
+        displayClients(ClientDAOImpl.findAll(clientService));
+
+        System.out.println("-----------------------------------------------------------------");
+
+    }
+
+    public static void findClients(){
+
+        System.out.println("----------------------Chercher un Client--------------------------");
+
+        String[] fields = {"Prenom", "Nom", "Date de naissance", "Adresse", "Numero de Tel"};
+
+        showOptions(fields);
+
+        int choice = takeInput(1,fields.length);
+
+        switch (choice){
+
+            case 1:
+                findClientsByFirstName();
+                break;
+            case 2:
+                findClientsByLastName();
+                break;
+            case 3:
+                findClientsByBirthDate();
+                break;
+            case 4:
+                findClientsByAddress();
+                break;
+            case 5:
+                findClientsByPhoneNbr();
+                break;
+            default:
+                break;
+        }
+
+        System.out.println("--------------------------------------------------------------------");
+
+
+    }
+
+    public static void findClientsByFirstName(){
+
+        System.out.println("----------------------Chercher un Employé par prénom--------------------------");
+
+        String[] fields = {"Prenom"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Prenom")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        displayClients(ClientDAOImpl.findByFirstName(filledFields.get("Prenom"),clientService));
+
+    }
+
+    public static void findClientsByLastName(){
+
+        System.out.println("----------------------Chercher un Employé par nom--------------------------");
+
+        String[] fields = {"Nom"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Nom")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayClients(ClientDAOImpl.findByLastName(filledFields.get("Nom"),clientService));
+
+    }
+
+    public static void findClientsByAddress(){
+
+        System.out.println("----------------------Chercher un Employé par Adresse--------------------------");
+
+        String[] fields = {"Adresse"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Adresse")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayClients(ClientDAOImpl.findByAddress(filledFields.get("Adresse"),clientService));
+
+    }
+
+    public static void findClientsByPhoneNbr(){
+
+        System.out.println("----------------------Chercher un Employé par Numéro de Tél--------------------------");
+
+        String[] fields = {"N Tel"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("N Tel")){
+                attribut.setMandatory();
+                attribut.setType("number");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayClients(ClientDAOImpl.findByPhoneNbr(filledFields.get("N Tel"),clientService));
+
+
+    }
+
+    public static void findClientsByBirthDate(){
+
+        System.out.println("----------------------Chercher un Employé par date de naissance--------------------------");
+
+        String[] fields = {"Date de naissance"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Date de naissance")){
+                attribut.setMandatory();
+                attribut.setType("date");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        displayClients(ClientDAOImpl.findByBirthDate(filledFields.get("Date de naissance"),clientService));
+
+    }
+
+
+
 
     //------------------------------------------------Comptes----------------------------
 
@@ -1176,6 +1361,24 @@ public class App {
         System.out.println("-------------------------------------------------------");
         System.out.println(client);
         System.out.println("-------------------------------------------------------");
+    }
+
+    public static void displayClients(List<Client> clients){
+
+        System.out.println("-------------------------------------------------------");
+
+        if(clients==null || clients.isEmpty()){
+            System.out.println("Rien à Afficher");
+        }
+
+        for (Client client : clients) {
+
+            System.out.println(client);
+
+        }
+
+        System.out.println("-------------------------------------------------------");
+
     }
 
     //------------------------------------------Compte------------------------------------
