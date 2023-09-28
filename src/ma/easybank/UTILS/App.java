@@ -37,7 +37,8 @@ public class App {
             "Supprimer une affectation",
             "Affficher la liste des comptes par etat",
             "Afficher la liste des comptes par date",
-            "Afficher l'historique affectations d'un employé"
+            "Afficher l'historique affectations d'un employé",
+            "modifier un compte"
     };
 
     public static Connection connection;
@@ -224,6 +225,9 @@ public class App {
                 break;
             case 26:
                 //getAsnmntsHistoryByEmpl();
+                break;
+            case 27:
+                modifyAccount();
                 break;
             default:
                 break;
@@ -703,6 +707,16 @@ public class App {
         });
 
         System.out.println("---------------------------------------------------------------------------------");
+
+    }
+
+    public static void modifyAccount() {
+
+        System.out.println("----------------------Modification d'un Compte--------------------------");
+
+        changeAccountState();
+
+        System.out.println("------------------------------------------------------------------------");
 
     }
 
