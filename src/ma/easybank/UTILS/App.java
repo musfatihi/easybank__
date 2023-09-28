@@ -217,7 +217,7 @@ public class App {
                 assign();
                 break;
             case 23:
-                //deleteAssignment();
+                deleteAssignment();
                 break;
             case 24:
                 //getAllAccountsByState();
@@ -862,6 +862,42 @@ public class App {
         Assignment assignment = new Assignment(new Mission(Integer.parseInt(filledFields.get("Code mission"))),new Employee(Integer.parseInt(filledFields.get("Matricule employe"))));
 
         displayAssignment(assignmentDAO.save(assignment));
+
+        System.out.println("--------------------------------------------------------------------");
+
+    }
+
+    public static void deleteAssignment(){
+
+        System.out.println("----------------------Suppression d'une affectation--------------------------");
+
+        String[] fields = {"Id Affectation"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Id Affectation")){
+                attribut.setMandatory();
+                attribut.setType("number");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Assignment assignment = new Assignment(Integer.valueOf(filledFields.get("Id Affectation")));
+
+        if(assignmentDAO.delete(assignment)){
+            Helpers.displaySuccessMsg("Affectation supprimée avec succès");
+        }else{
+            Helpers.displayErrorMsg("L'Opération a echoué!!");
+        }
 
         System.out.println("--------------------------------------------------------------------");
 

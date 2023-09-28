@@ -13,9 +13,7 @@ public class AssignmentDAOImpl implements AssignmentDAO {
     public static AssignmentService assignmentService;
 
     public AssignmentDAOImpl(AssignmentService assignmentService){
-
         AssignmentDAOImpl.assignmentService = assignmentService;
-
     }
 
     @Override
@@ -30,7 +28,7 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 
     @Override
     public Boolean delete(Assignment assignment) {
-        return null;
+        return assignmentService.delete(assignment);
     }
 
     @Override
