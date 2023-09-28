@@ -16,6 +16,8 @@ public class ClientService {
 
     private static final String SAVE_CLIENT = "insert into clients (firstname,lastname, birthdate, address, phonenumber) values (?,?,?,?,?) returning code";
 
+    private static final String UPDATE_CLIENT = "update clients set firstname=?,lastname=?,birthdate=?,address=?,phonenumber=? where code=?";
+
     private static final String DELETE_CLIENT = "update clients set deleted=true where code=?";
 
     private static final String FIND_CLIENT_CODE = "select * from clients where code=?";
@@ -57,6 +59,39 @@ public class ClientService {
         }
 
         return client;
+
+    }
+
+    //Client Updating
+    public Client updateClient(Client client) {
+
+        int updatedRows=0;
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(UPDATE_CLIENT);
+
+            stmt.setString(1, client.getFirstName());
+            stmt.setString(2, client.getLastName());
+            stmt.setDate(3, java.sql.Date.valueOf(client.getBirthDate()));
+            stmt.setString(4, client.getAddress());
+            stmt.setString(5, client.getPhoneNumber());
+
+            stmt.setInt(6, client.getCode());
+
+            updatedRows = stmt.executeUpdate();
+
+            if(updatedRows>0){
+                return client;
+            }
+
+        } catch (Exception e) {
+
+            System.out.println(e);
+
+        }
+
+        return null;
 
     }
 

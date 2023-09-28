@@ -40,7 +40,8 @@ public class App {
             "Supprimer une affectation",
             "Affficher la liste des comptes par etat",
             "Afficher la liste des comptes par date",
-            "Afficher l'historique affectations d'un employé"
+            "Afficher l'historique affectations d'un employé",
+            "mettre à jour un client"
     };
 
     public static Connection connection;
@@ -228,6 +229,9 @@ public class App {
             case 26:
                 //getAsnmntsHistoryByEmpl();
                 break;
+            case 27:
+                modifyClient();
+                break;
             default:
                 break;
         }
@@ -392,6 +396,53 @@ public class App {
                 filledFields.get("N° Tel"));
 
         displayClient(clientDAO.save(client));
+
+        System.out.println("--------------------------------------------------------------------");
+
+    }
+
+    public static void modifyClient(){
+
+        System.out.println("----------------------Modification d'un Client--------------------------");
+
+        String[] fields = {"Code","Prenom", "Nom", "Date de naissance", "Adresse", "N° Tel"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Code")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+
+            if(field.equals("Prenom") || fields.equals("Nom") || fields.equals("Adresse")){
+                attribut.setMandatory();
+            }
+
+            if(field.equals("N° Tel")){
+                attribut.setMandatory();
+                attribut.setType("number");
+            }
+
+            if(field.equals("Date de naissance")){
+                attribut.setType("date");
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Client client = new Client(Integer.valueOf(filledFields.get("Code")),filledFields.get("Prenom"),filledFields.get("Nom"), Helpers.strToDate(filledFields.get("Date de naissance")),filledFields.get("Adresse"),
+                filledFields.get("N° Tel"));
+
+        displayClient(clientDAO.update(client));
 
         System.out.println("--------------------------------------------------------------------");
 
@@ -1078,7 +1129,9 @@ public class App {
     //---------------------------------------------Client--------------------------------
     public static void displayClient(Client client){
         System.out.println("-------------------------------------------------------");
-        System.out.println(client);
+        if(client!=null){
+            System.out.println(client);
+        }
         System.out.println("-------------------------------------------------------");
     }
 
