@@ -53,7 +53,7 @@ public class App {
     public static SavingsaccntService savingsaccntService;
     public static OperationService operationService;
     public static MissionService missionService;
-    //public static AssignmentService assignmentService;
+    public static AssignmentService assignmentService;
 
 
     public static EmployeeDAOImpl employeeDAO;
@@ -89,7 +89,7 @@ public class App {
 
         missionService = new MissionService(connection);
 
-        //assignmentService = new AssignmentService(connection);
+        assignmentService = new AssignmentService(connection);
 
 
 
@@ -110,7 +110,7 @@ public class App {
 
         missionDAO = new MissionDAOImpl(missionService);
 
-        //assignmentDAO = new AssignmentDAOImpl(assignmentService);
+        assignmentDAO = new AssignmentDAOImpl(assignmentService);
 
     }
 
@@ -214,7 +214,7 @@ public class App {
                 getAllMissions();
                 break;
             case 22:
-                //assign();
+                assign();
                 break;
             case 23:
                 //deleteAssignment();
@@ -836,6 +836,38 @@ public class App {
     }
 
 
+    public static void assign(){
+
+        System.out.println("----------------------Creation d'une affectation--------------------------");
+
+        String[] fields = {"Code mission", "Matricule employe"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Code mission") || field.equals("Matricule employe")){
+                attribut.setMandatory();
+                attribut.setType("number");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Assignment assignment = new Assignment(new Mission(Integer.parseInt(filledFields.get("Code mission"))),new Employee(Integer.parseInt(filledFields.get("Matricule employe"))));
+
+        displayAssignment(assignmentDAO.save(assignment));
+
+        System.out.println("--------------------------------------------------------------------");
+
+    }
+
+
 
 
 
@@ -907,7 +939,7 @@ public class App {
         System.out.println("-------------------------------------------------------");
     }
 
-    //------------------------------------------Compte------------------------------------
+    //------------------------------------------Compte---------------------------------------
 
     public static void displayAccount(Account account){
         System.out.println("-------------------------------------------------------");
@@ -955,6 +987,14 @@ public class App {
 
             }
         }
+    }
+
+    //-----------------------------------------Assignments-------------------------------------
+
+    public static void displayAssignment(Assignment assignment){
+        System.out.println("-------------------------------------------------------");
+        System.out.println(assignment);
+        System.out.println("-------------------------------------------------------");
     }
 
 
