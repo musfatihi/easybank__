@@ -7,10 +7,7 @@ import ma.easybank.DTO.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 
@@ -205,10 +202,10 @@ public class App {
                 findClients();
                 break;
             case 19:
-                //getAllAccounts();
+                getAllAccounts();
                 break;
             case 20:
-                //changeAccountState();
+                changeAccountState();
                 break;
             case 21:
                 //getAllMissions();
@@ -220,10 +217,10 @@ public class App {
                 //deleteAssignment();
                 break;
             case 24:
-                //getAllAccountsByState();
+                getAllAccountsByState();
                 break;
             case 25:
-                //getAllAccountsByDate();
+                getAllAccountsByDate();
                 break;
             case 26:
                 //getAsnmntsHistoryByEmpl();
@@ -1065,6 +1062,97 @@ public class App {
 
 
         System.out.println("--------------------------------------------------------------------");
+
+    }
+
+    public static void getAllAccounts(){
+        System.out.println("----------------------Tous les comptes--------------------------");
+
+        System.out.println("----------------------Les comptes courants--------------------------");
+
+        displayAccounts(AccountDAOImpl.findAll(accountService).get("current"));
+
+        System.out.println("----------------------Les comptes d'epargne--------------------------");
+
+        displayAccounts(AccountDAOImpl.findAll(accountService).get("savings"));
+
+        System.out.println("-----------------------------------------------------------------");
+    }
+
+    public static void changeAccountState(){
+
+        System.out.println("----------------------Changement de status d'un Compte--------------------------");
+
+        String[] fields = {"Numero de compte","Active or Blocked"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Numero de compte")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+            if(field.equals("Active or Blocked")){
+                attribut.setType("state");
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Account account = new Account(Integer.valueOf(filledFields.get("Numero de compte")));
+
+        if(AccountDAOImpl.changeState(account,State.valueOf(filledFields.get("Active or Blocked")),accountService))
+        {
+            Helpers.displaySuccessMsg("L'état de compte a été modifié avec succès");
+        }else{
+            Helpers.displayErrorMsg("Aucun compte avec ce numèro!!");
+        }
+
+        System.out.println("--------------------------------------------------------------------");
+
+
+    }
+
+    public static void getAllAccountsByState(){
+
+        System.out.println("---------------------------------Tous les comptes------------------------------");
+
+        Map<String,List<Account>> accounts = AccountDAOImpl.findAllByState(accountService);
+
+        System.out.println("----------------------------------Comptes Actifs-------------------------------");
+
+        displayAccounts(accounts.get("Active"));
+
+        System.out.println("----------------------------------Comptes Bloqués------------------------------");
+
+        displayAccounts(accounts.get("Blocked"));
+
+        System.out.println("----------------------------------Comptes Supprimés-----------------------------");
+
+        displayAccounts(accounts.get("Deleted"));
+
+        System.out.println("---------------------------------------------------------------------------------");
+
+    }
+
+    public static void getAllAccountsByDate(){
+
+        System.out.println("---------------------------------Tous les comptes par date------------------------------");
+
+        AccountDAOImpl.findAllByDate(accountService).forEach((crnDate, accounts) -> {
+            System.out.println("Date: " + Helpers.localDateToStr(crnDate)+"\n");
+            accounts.forEach(account -> System.out.println(account));
+        });
+
+        System.out.println("---------------------------------------------------------------------------------");
 
     }
 
