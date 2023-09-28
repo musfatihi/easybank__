@@ -40,7 +40,8 @@ public class App {
             "Supprimer une affectation",
             "Affficher la liste des comptes par etat",
             "Afficher la liste des comptes par date",
-            "Afficher l'historique affectations d'un employé"
+            "Afficher l'historique affectations d'un employé",
+            "Mettre à jour un employé"
     };
 
     public static Connection connection;
@@ -227,6 +228,9 @@ public class App {
                 break;
             case 26:
                 //getAsnmntsHistoryByEmpl();
+                break;
+            case 27:
+                updateEmployee();
                 break;
             default:
                 break;
@@ -610,6 +614,51 @@ public class App {
         displayEmployees(EmployeeDAOImpl.findByRcrtmntDate(filledFields.get("Date de recrutement"),employeeService));
 
         System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void updateEmployee(){
+
+        System.out.println("----------------------Modification d'un Employe--------------------------");
+
+        String[] fields = {"Matricule","Prenom", "Nom", "Date de naissance", "Adresse", "N° Tel","Date de recrutement","Adresse Mail"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Matricule")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+
+            if(field.equals("Prenom") || field.equals("Nom") || field.equals("Adresse") || field.equals("Adresse Mail")){
+                attribut.setMandatory();
+            }
+
+            if(field.equals("Date de naissance") || field.equals("Date de recrutement")){
+                attribut.setType("date");
+                attribut.setMandatory();
+            }
+
+            if(field.equals("N° Tel")){
+                attribut.setType("number");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Employee employee = new Employee(Integer.valueOf(filledFields.get("Matricule")),filledFields.get("Prenom"),filledFields.get("Nom"), Helpers.strToDate(filledFields.get("Date de naissance")),filledFields.get("Adresse"),
+                filledFields.get("N° Tel"),Helpers.strToDate(filledFields.get("Date de recrutement")),filledFields.get("Adresse Mail"));
+
+        displayEmployee(employeeDAO.update(employee));
+
+        System.out.println("--------------------------------------------------------------------");
 
     }
 
@@ -1151,7 +1200,9 @@ public class App {
     //---------------------------------------------Employee-------------------------------
     public static void displayEmployee(Employee employee){
         System.out.println("-------------------------------------------------------");
-        System.out.println(employee);
+        if(employee!=null){
+            System.out.println(employee);
+        }
         System.out.println("-------------------------------------------------------");
     }
 
