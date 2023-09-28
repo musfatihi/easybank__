@@ -5,6 +5,8 @@ import ma.easybank.DTO.Mission;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MissionService {
 
@@ -13,6 +15,9 @@ public class MissionService {
     private static final String SAVE_MISSION = "insert into missions (name,description) values (?,?) returning code";
 
     private static final String DELETE_MISSION = "update missions set deleted=true where code=?";
+
+    private static final String FIND_ALL_MISSIONS = "select * from missions where deleted=false";
+
 
 
 
@@ -68,6 +73,37 @@ public class MissionService {
         }
 
         return rowsUpdated>0;
+
+    }
+
+    //Find All Missions
+    public List<Mission> findAllMissions() {
+
+        List<Mission> missions = new ArrayList<>();
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(FIND_ALL_MISSIONS, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                Mission mission = new Mission(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3));
+
+                missions.add(mission);
+
+            }
+
+        }
+        catch(Exception e){
+
+            System.out.println(e);
+
+        }
+
+        return missions;
 
     }
 

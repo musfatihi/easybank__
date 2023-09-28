@@ -50,7 +50,7 @@ public class App {
     public static SavingsaccntService savingsaccntService;
     public static OperationService operationService;
     public static MissionService missionService;
-    //public static AssignmentService assignmentService;
+    public static AssignmentService assignmentService;
 
 
     public static EmployeeDAOImpl employeeDAO;
@@ -86,7 +86,7 @@ public class App {
 
         missionService = new MissionService(connection);
 
-        //assignmentService = new AssignmentService(connection);
+        assignmentService = new AssignmentService(connection);
 
 
 
@@ -107,7 +107,7 @@ public class App {
 
         missionDAO = new MissionDAOImpl(missionService);
 
-        //assignmentDAO = new AssignmentDAOImpl(assignmentService);
+        assignmentDAO = new AssignmentDAOImpl(assignmentService);
 
     }
 
@@ -208,13 +208,13 @@ public class App {
                 changeAccountState();
                 break;
             case 21:
-                //getAllMissions();
+                getAllMissions();
                 break;
             case 22:
-                //assign();
+                assign();
                 break;
             case 23:
-                //deleteAssignment();
+                deleteAssignment();
                 break;
             case 24:
                 getAllAccountsByState();
@@ -1363,6 +1363,84 @@ public class App {
         System.out.println("--------------------------------------------------------------------");
     }
 
+    public static void getAllMissions(){
+
+        System.out.println("----------------------Toutes les missions--------------------------");
+
+        displayMissions(MissionDAOImpl.findAll(missionService));
+
+        System.out.println("-----------------------------------------------------------------");
+
+    }
+
+
+    public static void assign(){
+
+        System.out.println("----------------------Creation d'une affectation--------------------------");
+
+        String[] fields = {"Code mission", "Matricule employe"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Code mission") || field.equals("Matricule employe")){
+                attribut.setMandatory();
+                attribut.setType("number");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Assignment assignment = new Assignment(new Mission(Integer.parseInt(filledFields.get("Code mission"))),new Employee(Integer.parseInt(filledFields.get("Matricule employe"))));
+
+        displayAssignment(assignmentDAO.save(assignment));
+
+        System.out.println("--------------------------------------------------------------------");
+
+    }
+
+    public static void deleteAssignment(){
+
+        System.out.println("----------------------Suppression d'une affectation--------------------------");
+
+        String[] fields = {"Id Affectation"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Id Affectation")){
+                attribut.setMandatory();
+                attribut.setType("number");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Assignment assignment = new Assignment(Integer.valueOf(filledFields.get("Id Affectation")));
+
+        if(assignmentDAO.delete(assignment)){
+            Helpers.displaySuccessMsg("Affectation supprimée avec succès");
+        }else{
+            Helpers.displayErrorMsg("L'Opération a echoué!!");
+        }
+
+        System.out.println("--------------------------------------------------------------------");
+
+    }
+
 
 
 
@@ -1451,6 +1529,7 @@ public class App {
         System.out.println("-------------------------------------------------------");
     }
 
+
     public static void displayClients(List<Client> clients){
 
         System.out.println("-------------------------------------------------------");
@@ -1504,6 +1583,26 @@ public class App {
     public static void displayMission(Mission mission){
         System.out.println("-------------------------------------------------------");
         System.out.println(mission);
+        System.out.println("-------------------------------------------------------");
+    }
+
+    public static void displayMissions(List<Mission> missions){
+        if(missions==null || missions.isEmpty()){
+            System.out.println("Rien à afficher");
+        }else{
+            for (Mission mission : missions) {
+
+                System.out.println(mission);
+
+            }
+        }
+    }
+
+    //-----------------------------------------Assignments-------------------------------------
+
+    public static void displayAssignment(Assignment assignment){
+        System.out.println("-------------------------------------------------------");
+        System.out.println(assignment);
         System.out.println("-------------------------------------------------------");
     }
 
