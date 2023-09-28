@@ -2,10 +2,12 @@ package ma.easybank.DAO.Implmnts;
 
 import ma.easybank.DAO.Intrfcs.ClientDAO;
 import ma.easybank.DAO.Services.ClientService;
-import ma.easybank.DAO.Services.EmployeeService;
 import ma.easybank.DTO.Client;
+import ma.easybank.UTILS.Helpers;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ClientDAOImpl implements ClientDAO {
 
@@ -29,5 +31,40 @@ public class ClientDAOImpl implements ClientDAO {
     public Boolean delete(Client client) {
         return clientService.deleteClient(client);
     }
+
+    public static List<Client> findAll(ClientService clientService) {
+        return clientService.findAllClients();
+    }
+
+    public static List<Client> findByFirstName(String firstName,ClientService clientService) {
+        return clientService.findAllClients().stream()
+                .filter(client -> client.getFirstName().equals(firstName))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Client> findByLastName(String lastName,ClientService clientService) {
+        return clientService.findAllClients().stream()
+                .filter(client -> client.getLastName().equals(lastName))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Client> findByAddress(String address,ClientService clientService) {
+        return clientService.findAllClients().stream()
+                .filter(client -> client.getAddress().equals(address))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Client> findByPhoneNbr(String phoneNbr,ClientService clientService) {
+        return clientService.findAllClients().stream()
+                .filter(client -> client.getPhoneNumber().equals(phoneNbr))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Client> findByBirthDate(String birthDate,ClientService clientService) {
+        return clientService.findAllClients().stream()
+                .filter(client -> client.getBirthDate().equals(Helpers.strToDate(birthDate)))
+                .collect(Collectors.toList());
+    }
+
 
 }

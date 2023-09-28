@@ -5,6 +5,8 @@ import ma.easybank.DTO.Client;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -17,6 +19,9 @@ public class ClientService {
     private static final String DELETE_CLIENT = "update clients set deleted=true where code=?";
 
     private static final String FIND_CLIENT_CODE = "select * from clients where code=?";
+
+    private static final String FIND_ALL_CLIENTS = "select * from clients where deleted!=true";
+
 
 
     //Constructor
@@ -107,6 +112,37 @@ public class ClientService {
         }
 
         return Optional.empty();
+
+    }
+
+    //Find All Clients
+    public List<Client> findAllClients() {
+
+        List<Client> clients = new ArrayList<>();
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(FIND_ALL_CLIENTS, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                Client client = new Client(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3),resultSet.getDate(4).toLocalDate(),resultSet.getString(5),resultSet.getString(6));
+
+                clients.add(client);
+
+            }
+
+        }
+        catch(Exception e){
+
+            System.out.println(e);
+
+        }
+
+        return clients;
 
     }
 

@@ -7,10 +7,7 @@ import ma.easybank.DTO.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 
@@ -193,22 +190,22 @@ public class App {
                 deleteMission();
                 break;
             case 15:
-                //getAllEmployees();
+                getAllEmployees();
                 break;
             case 16:
-                //findEmployees();
+                findEmployees();
                 break;
             case 17:
-                //getAllClients();
+                getAllClients();
                 break;
             case 18:
-                //findClients();
+                findClients();
                 break;
             case 19:
-                //getAllAccounts();
+                getAllAccounts();
                 break;
             case 20:
-                //changeAccountState();
+                changeAccountState();
                 break;
             case 21:
                 getAllMissions();
@@ -220,10 +217,10 @@ public class App {
                 deleteAssignment();
                 break;
             case 24:
-                //getAllAccountsByState();
+                getAllAccountsByState();
                 break;
             case 25:
-                //getAllAccountsByDate();
+                getAllAccountsByDate();
                 break;
             case 26:
                 //getAsnmntsHistoryByEmpl();
@@ -351,6 +348,271 @@ public class App {
 
     }
 
+    public static void getAllEmployees(){
+
+        System.out.println("----------------------Tous les employés--------------------------");
+
+        displayEmployees(EmployeeDAOImpl.findAll(employeeService));
+
+        System.out.println("-----------------------------------------------------------------");
+
+    }
+
+    public static void findEmployees() {
+
+        System.out.println("----------------------Chercher un Employé--------------------------");
+
+        String[] fields = {"Prenom", "Nom", "Date de naissance", "Adresse", "Numero de Tel", "Date de recrutement", "Adresse mail"};
+
+        showOptions(fields);
+
+        int choice = takeInput(1, fields.length);
+
+        switch (choice) {
+
+            case 1:
+                findEmployeesByFirstName();
+                break;
+            case 2:
+                findEmployeesByLastName();
+                break;
+            case 3:
+                findEmployeesByBirthDate();
+                break;
+            case 4:
+                findEmployeesByAddress();
+                break;
+            case 5:
+                findEmployeesByPhoneNbr();
+                break;
+            case 6:
+                findEmployeesByRcrtmntDate();
+                break;
+            case 7:
+                findEmployeesByMailAddress();
+                break;
+            default:
+                break;
+        }
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void findEmployeesByFirstName(){
+
+        System.out.println("----------------------Chercher un Employé par prénom--------------------------");
+
+        String[] fields = {"Prenom"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Prenom")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByFirstName(filledFields.get("Prenom"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+
+    }
+
+    public static void findEmployeesByLastName(){
+
+        System.out.println("----------------------Chercher un Employé par nom--------------------------");
+
+        String[] fields = {"Nom"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Nom")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByLastName(filledFields.get("Nom"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+
+    }
+
+    public static void findEmployeesByAddress(){
+
+        System.out.println("----------------------Chercher un Employé par Adresse--------------------------");
+
+        String[] fields = {"Adresse"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Adresse")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByAddress(filledFields.get("Adresse"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void findEmployeesByPhoneNbr(){
+
+        System.out.println("----------------------Chercher un Employé par Numéro de Tél--------------------------");
+
+        String[] fields = {"N TEL"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("N TEL")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByPhoneNbr(filledFields.get("N TEL"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+    }
+
+    public static void findEmployeesByMailAddress(){
+
+        System.out.println("----------------------Chercher un Employé par Adresse Mail--------------------------");
+
+        String[] fields = {"E-MAIL"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        //Objects Creation
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("E-MAIL")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByMailAdrs(filledFields.get("E-MAIL"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void findEmployeesByBirthDate(){
+
+        System.out.println("----------------------Chercher un Employé par date de naissance--------------------------");
+
+        String[] fields = {"Date de naissance"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        //Objects Creation
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Date de naissance")){
+                attribut.setMandatory();
+                attribut.setType("date");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        displayEmployees(EmployeeDAOImpl.findByBirthDate(filledFields.get("Date de naissance"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void findEmployeesByRcrtmntDate(){
+
+        System.out.println("----------------------Chercher un Employé par date de recrutement--------------------------");
+
+        String[] fields = {"Date de recrutement"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        //Objects Creation
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Date de recrutement")){
+                attribut.setMandatory();
+                attribut.setType("date");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        displayEmployees(EmployeeDAOImpl.findByRcrtmntDate(filledFields.get("Date de recrutement"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+
+
+
 
     //-------------------------------------------------Clients-------------------------------
 
@@ -467,6 +729,191 @@ public class App {
         System.out.println("--------------------------------------------------------------------");
 
     }
+
+    public static void getAllClients(){
+
+        System.out.println("----------------------Tous les clients--------------------------");
+
+        displayClients(ClientDAOImpl.findAll(clientService));
+
+        System.out.println("-----------------------------------------------------------------");
+
+    }
+
+    public static void findClients(){
+
+        System.out.println("----------------------Chercher un Client--------------------------");
+
+        String[] fields = {"Prenom", "Nom", "Date de naissance", "Adresse", "Numero de Tel"};
+
+        showOptions(fields);
+
+        int choice = takeInput(1,fields.length);
+
+        switch (choice){
+
+            case 1:
+                findClientsByFirstName();
+                break;
+            case 2:
+                findClientsByLastName();
+                break;
+            case 3:
+                findClientsByBirthDate();
+                break;
+            case 4:
+                findClientsByAddress();
+                break;
+            case 5:
+                findClientsByPhoneNbr();
+                break;
+            default:
+                break;
+        }
+
+        System.out.println("--------------------------------------------------------------------");
+
+
+    }
+
+    public static void findClientsByFirstName(){
+
+        System.out.println("----------------------Chercher un Employé par prénom--------------------------");
+
+        String[] fields = {"Prenom"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Prenom")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        displayClients(ClientDAOImpl.findByFirstName(filledFields.get("Prenom"),clientService));
+
+    }
+
+    public static void findClientsByLastName(){
+
+        System.out.println("----------------------Chercher un Employé par nom--------------------------");
+
+        String[] fields = {"Nom"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Nom")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayClients(ClientDAOImpl.findByLastName(filledFields.get("Nom"),clientService));
+
+    }
+
+    public static void findClientsByAddress(){
+
+        System.out.println("----------------------Chercher un Employé par Adresse--------------------------");
+
+        String[] fields = {"Adresse"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Adresse")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayClients(ClientDAOImpl.findByAddress(filledFields.get("Adresse"),clientService));
+
+    }
+
+    public static void findClientsByPhoneNbr(){
+
+        System.out.println("----------------------Chercher un Employé par Numéro de Tél--------------------------");
+
+        String[] fields = {"N Tel"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("N Tel")){
+                attribut.setMandatory();
+                attribut.setType("number");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayClients(ClientDAOImpl.findByPhoneNbr(filledFields.get("N Tel"),clientService));
+
+
+    }
+
+    public static void findClientsByBirthDate(){
+
+        System.out.println("----------------------Chercher un Employé par date de naissance--------------------------");
+
+        String[] fields = {"Date de naissance"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Date de naissance")){
+                attribut.setMandatory();
+                attribut.setType("date");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        displayClients(ClientDAOImpl.findByBirthDate(filledFields.get("Date de naissance"),clientService));
+
+    }
+
+
 
 
     //------------------------------------------------Comptes----------------------------
@@ -615,6 +1062,97 @@ public class App {
 
 
         System.out.println("--------------------------------------------------------------------");
+
+    }
+
+    public static void getAllAccounts(){
+        System.out.println("----------------------Tous les comptes--------------------------");
+
+        System.out.println("----------------------Les comptes courants--------------------------");
+
+        displayAccounts(AccountDAOImpl.findAll(accountService).get("current"));
+
+        System.out.println("----------------------Les comptes d'epargne--------------------------");
+
+        displayAccounts(AccountDAOImpl.findAll(accountService).get("savings"));
+
+        System.out.println("-----------------------------------------------------------------");
+    }
+
+    public static void changeAccountState(){
+
+        System.out.println("----------------------Changement de status d'un Compte--------------------------");
+
+        String[] fields = {"Numero de compte","Active or Blocked"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Numero de compte")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+            if(field.equals("Active or Blocked")){
+                attribut.setType("state");
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Account account = new Account(Integer.valueOf(filledFields.get("Numero de compte")));
+
+        if(AccountDAOImpl.changeState(account,State.valueOf(filledFields.get("Active or Blocked")),accountService))
+        {
+            Helpers.displaySuccessMsg("L'état de compte a été modifié avec succès");
+        }else{
+            Helpers.displayErrorMsg("Aucun compte avec ce numèro!!");
+        }
+
+        System.out.println("--------------------------------------------------------------------");
+
+
+    }
+
+    public static void getAllAccountsByState(){
+
+        System.out.println("---------------------------------Tous les comptes------------------------------");
+
+        Map<String,List<Account>> accounts = AccountDAOImpl.findAllByState(accountService);
+
+        System.out.println("----------------------------------Comptes Actifs-------------------------------");
+
+        displayAccounts(accounts.get("Active"));
+
+        System.out.println("----------------------------------Comptes Bloqués------------------------------");
+
+        displayAccounts(accounts.get("Blocked"));
+
+        System.out.println("----------------------------------Comptes Supprimés-----------------------------");
+
+        displayAccounts(accounts.get("Deleted"));
+
+        System.out.println("---------------------------------------------------------------------------------");
+
+    }
+
+    public static void getAllAccountsByDate(){
+
+        System.out.println("---------------------------------Tous les comptes par date------------------------------");
+
+        AccountDAOImpl.findAllByDate(accountService).forEach((crnDate, accounts) -> {
+            System.out.println("Date: " + Helpers.localDateToStr(crnDate)+"\n");
+            accounts.forEach(account -> System.out.println(account));
+        });
+
+        System.out.println("---------------------------------------------------------------------------------");
 
     }
 
@@ -968,6 +1506,22 @@ public class App {
         System.out.println("-------------------------------------------------------");
     }
 
+    public static void displayEmployees(List<Employee> employees){
+
+        System.out.println("-------------------------------------------------------");
+
+        if(employees==null || employees.isEmpty()){
+            System.out.println("Rien à Afficher");
+        }
+
+        for (Employee employee : employees) {
+            System.out.println(employee);
+        }
+
+        System.out.println("-------------------------------------------------------");
+
+    }
+
     //---------------------------------------------Client--------------------------------
     public static void displayClient(Client client){
         System.out.println("-------------------------------------------------------");
@@ -975,7 +1529,26 @@ public class App {
         System.out.println("-------------------------------------------------------");
     }
 
-    //------------------------------------------Compte---------------------------------------
+
+    public static void displayClients(List<Client> clients){
+
+        System.out.println("-------------------------------------------------------");
+
+        if(clients==null || clients.isEmpty()){
+            System.out.println("Rien à Afficher");
+        }
+
+        for (Client client : clients) {
+
+            System.out.println(client);
+
+        }
+
+        System.out.println("-------------------------------------------------------");
+
+    }
+
+    //------------------------------------------Compte------------------------------------
 
     public static void displayAccount(Account account){
         System.out.println("-------------------------------------------------------");
