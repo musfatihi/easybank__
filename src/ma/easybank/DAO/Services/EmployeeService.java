@@ -21,7 +21,10 @@ public class EmployeeService {
 
     private static final String FIND_EMPLOYEE_MTRCL = "select * from employees where mtrcltNbr=?";
 
-    private static final String FIND_ALL_EMPLOYEES = "select * from employees where deleted!=true";
+    private static final String FIND_ALL_EMPLOYEES = "select * from employees where deleted=false";
+
+    private static final String CHECK_EMPLOYEE = "select count(*) from employees where mtrcltnbr=? and deleted=false";
+
 
 
 
@@ -180,6 +183,35 @@ public class EmployeeService {
         }
 
         return employees;
+
+    }
+
+    //Check employee
+    public Boolean exists(Employee employee){
+
+        int count=0;
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(CHECK_EMPLOYEE, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+            stmt.setInt(1, employee.getMtrcltNbr());
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            resultSet.next();
+
+            count = resultSet.getInt(1);
+
+        }
+        catch(Exception e){
+
+            System.out.println(e);
+
+        }
+
+        return count>0;
 
     }
 
