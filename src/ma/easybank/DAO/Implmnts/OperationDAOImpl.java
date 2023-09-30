@@ -4,6 +4,7 @@ import ma.easybank.DAO.Intrfcs.OperationDAO;
 import ma.easybank.DAO.Services.CurrentaccntService;
 import ma.easybank.DAO.Services.OperationService;
 import ma.easybank.DAO.Services.SavingsaccntService;
+import ma.easybank.DTO.Account;
 import ma.easybank.DTO.Operation;
 
 import java.util.Optional;
@@ -35,6 +36,10 @@ public class OperationDAOImpl implements OperationDAO {
 
     public static Boolean isValid(Operation operation,SavingsaccntService savingsaccntService,CurrentaccntService currentaccntService) {
         return currentaccntService.isWithdrawalValid(operation) || savingsaccntService.isWithdrawalValid(operation);
+    }
+
+    public static Optional<Account> findAccountByOprNbr(Operation operation){
+        return operationService.findAccountByOprNbr(operation);
     }
 
 }
