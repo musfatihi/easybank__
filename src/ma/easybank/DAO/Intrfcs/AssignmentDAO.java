@@ -14,6 +14,4 @@ public interface AssignmentDAO {
 
     Boolean delete(Assignment assignment);
 
-    HashMap<String,String> getStats();
-
 }

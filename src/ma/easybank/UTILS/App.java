@@ -37,7 +37,8 @@ public class App {
             "Supprimer une affectation",
             "Affficher la liste des comptes par etat",
             "Afficher la liste des comptes par date",
-            "Afficher l'historique affectations d'un employé"
+            "Afficher l'historique affectations d'un employé",
+            "Afficher les statistiques"
     };
 
     public static Connection connection;
@@ -224,6 +225,9 @@ public class App {
                 break;
             case 26:
                 getAsnmntsHistoryByEmpl();
+                break;
+            case 27:
+                getStats();
                 break;
             default:
                 break;
@@ -1473,6 +1477,16 @@ public class App {
 
     }
 
+    public static void getStats(){
+
+        System.out.println("----------------------Statistiques--------------------------");
+
+        displayStats(AssignmentDAOImpl.getStats());
+
+        System.out.println("-------------------------------------------------------------");
+
+    }
+
 
 
 
@@ -1646,6 +1660,13 @@ public class App {
             for (Assignment assignment : assignments) {
                 System.out.println(assignment);
             }
+        }
+    }
+
+    public static void displayStats(HashMap<String,String> stats){
+        for (String key : stats.keySet()) {
+            String value = stats.get(key);
+            System.out.println(key + " : " + value);
         }
     }
 

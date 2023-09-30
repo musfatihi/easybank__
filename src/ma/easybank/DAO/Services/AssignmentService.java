@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AssignmentService {
@@ -20,6 +21,9 @@ public class AssignmentService {
     private static final String DELETE_ASSIGNMENT = "update assignments set enddate=? where id=?";
 
     private static final String FIND_ASSIGNMENTS_EMPLOYEE = "select missions.name,missions.description,assignments.startdate,assignments.enddate from assignments inner join missions on assignments.msncode=missions.code where empmtrcl=? order by startdate desc";
+
+    private static final String GET_STATS = "select count(*) from assignments";
+
 
 
 
@@ -112,6 +116,30 @@ public class AssignmentService {
 
         return  assignments;
 
+    }
+
+    public HashMap<String,String> getStats() {
+
+        HashMap<String,String> stats = new HashMap<>();
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(GET_STATS);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            while(resultSet.next()){
+                stats.put("Total",String.valueOf(resultSet.getInt(1)));
+            }
+
+
+        } catch (Exception e) {
+
+            System.out.println(e);
+
+        }
+
+        return stats;
     }
 
 }
