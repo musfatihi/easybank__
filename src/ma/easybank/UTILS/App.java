@@ -37,11 +37,12 @@ public class App {
             "Supprimer une affectation",
             "Affficher la liste des comptes par etat",
             "Afficher la liste des comptes par date",
-            "Afficher l'historique affectations d'un employé",
             "Mettre à jour un employé",
             "mettre à jour un client",
             "modifier un compte",
-            "Chercher un compte par numèro d'opération"
+            "Chercher un compte par numèro d'opération",
+            "Afficher l'historique affectations d'un employé",
+            "Afficher les statistiques"
     };
 
     public static Connection connection;
@@ -227,19 +228,22 @@ public class App {
                 getAllAccountsByDate();
                 break;
             case 26:
-                //getAsnmntsHistoryByEmpl();
-                break;
-            case 27:
                 updateEmployee();
                 break;
-            case 28:
+            case 27:
                 modifyClient();
                 break;
-            case 29:
+            case 28:
                 modifyAccount();
                 break;
-            case 30:
+            case 29:
                 findAccountByOprNbr();
+                break;
+            case 30:
+                getAsnmntsHistoryByEmpl();
+                break;
+            case 31:
+                getStats();
                 break;
             default:
                 break;
@@ -1598,6 +1602,48 @@ public class App {
 
     }
 
+    public static void getAsnmntsHistoryByEmpl(){
+
+        System.out.println("----------------------Historique affectations Employé--------------------------");
+
+        String[] fields = {"Matricule"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Matricule")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Employee employee = new Employee(Integer.valueOf(filledFields.get("Matricule")));
+
+        displayAssignments(assignmentDAO.findBy(employee));
+
+        System.out.println("--------------------------------------------------------------------");
+
+
+    }
+
+    public static void getStats(){
+
+        System.out.println("----------------------Statistiques--------------------------");
+
+        displayStats(AssignmentDAOImpl.getStats());
+
+        System.out.println("-------------------------------------------------------------");
+
+    }
+
 
 
 
@@ -1767,6 +1813,24 @@ public class App {
         System.out.println("-------------------------------------------------------");
         System.out.println(assignment);
         System.out.println("-------------------------------------------------------");
+    }
+
+    public static void displayAssignments(List<Assignment> assignments){
+
+        if(assignments==null || assignments.isEmpty()){
+            System.out.println("Rien à afficher");
+        }else{
+            for (Assignment assignment : assignments) {
+                System.out.println(assignment);
+            }
+        }
+    }
+
+    public static void displayStats(HashMap<String,String> stats){
+        for (String key : stats.keySet()) {
+            String value = stats.get(key);
+            System.out.println(key + " : " + value);
+        }
     }
 
 

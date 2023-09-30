@@ -28,9 +28,17 @@ public class Assignment {
 
     }
 
-    public Assignment(Mission mission,LocalDate startDate){
+    public Assignment(Mission mission,Employee employee,LocalDate startDate,LocalDate endDate){
+        this.mission = mission;
+        this.employee = employee;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
+    public Assignment(Mission mission,Employee employee,LocalDate startDate){
 
         this.mission = mission;
+        this.employee = employee;
         this.startDate = startDate;
 
     }
@@ -41,6 +49,7 @@ public class Assignment {
         this.employee = employee;
 
     }
+
 
     public int getId() {
         return id;
@@ -86,7 +95,7 @@ public class Assignment {
 
     @Override
     public String toString() {
-        return "Mission : "+this.mission.getCode()+"\n"+"Opérateur : "+this.employee.getMtrcltNbr()+"\n"+
+        return "Mission : "+this.mission.getName()+"\n"+"Opérateur : "+this.employee.getMtrcltNbr()+"\n"+
                 "Du : "+ Helpers.localDateToStr(this.startDate)+"\n"+"Au : "+(this.endDate!=null?Helpers.localDateToStr(this.endDate):"--")+"\n";
 
     }

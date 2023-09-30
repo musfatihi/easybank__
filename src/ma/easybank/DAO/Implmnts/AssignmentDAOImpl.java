@@ -23,7 +23,7 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 
     @Override
     public List<Assignment> findBy(Employee employee) {
-        return null;
+        return assignmentService.findByEmployee(employee);
     }
 
     @Override
@@ -31,8 +31,7 @@ public class AssignmentDAOImpl implements AssignmentDAO {
         return assignmentService.delete(assignment);
     }
 
-    @Override
-    public HashMap<String, String> getStats() {
-        return null;
+    public static HashMap<String, String> getStats() {
+        return assignmentService.getStats();
     }
 }
