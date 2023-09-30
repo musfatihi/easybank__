@@ -39,7 +39,9 @@ public class App {
             "Afficher la liste des comptes par date",
             "Afficher l'historique affectations d'un employé",
             "Mettre à jour un employé",
-            "mettre à jour un client"
+            "mettre à jour un client",
+            "modifier un compte",
+            "Chercher un compte par numèro d'opération"
     };
 
     public static Connection connection;
@@ -232,6 +234,12 @@ public class App {
                 break;
             case 28:
                 modifyClient();
+                break;
+            case 29:
+                modifyAccount();
+                break;
+            case 30:
+                findAccountByOprNbr();
                 break;
             default:
                 break;
@@ -1256,6 +1264,55 @@ public class App {
 
     }
 
+    public static void modifyAccount() {
+
+        System.out.println("----------------------Modification d'un Compte--------------------------");
+
+        changeAccountState();
+
+        System.out.println("------------------------------------------------------------------------");
+
+    }
+
+    public static void findAccountByOprNbr(){
+
+        System.out.println("----------------------Chercher le compte par numéro d'opération--------------------------");
+
+        String[] fields = {"Numero d'operation"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Numero d'operation")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Operation operation = new Operation(Integer.valueOf(filledFields.get("Numero d'operation")));
+
+
+        System.out.println("----------------------------------Compte-----------------------------");
+
+       if(OperationDAOImpl.findAccountByOprNbr(operation).isPresent()){
+           displayAccount(OperationDAOImpl.findAccountByOprNbr(operation).get());
+       }else{
+           Helpers.displayErrorMsg("Une erreur est survenue!!");
+       }
+
+        System.out.println("--------------------------------------------------------------------");
+
+    }
+
 
     //------------------------------------------------Operations------------------------------
 
@@ -1679,7 +1736,9 @@ public class App {
     //--------------------------------------------Operation-------------------------------
 
     public static void displayOperation(Operation operation){
+        System.out.println("-------------------------------------------------------");
         System.out.println(operation);
+        System.out.println("-------------------------------------------------------");
     }
 
     //----------------------------------------Mission--------------------------------------
