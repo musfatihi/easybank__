@@ -1,6 +1,7 @@
 package ma.easybank.DAO.Services;
 
 import ma.easybank.DTO.Client;
+import ma.easybank.DTO.Employee;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,7 +23,10 @@ public class ClientService {
 
     private static final String FIND_CLIENT_CODE = "select * from clients where code=?";
 
-    private static final String FIND_ALL_CLIENTS = "select * from clients where deleted!=true";
+    private static final String FIND_ALL_CLIENTS = "select * from clients where deleted=false";
+
+    private static final String CHECK_CLIENT = "select count(*) from clients where code=? and deleted=false";
+
 
 
 
@@ -178,6 +182,35 @@ public class ClientService {
         }
 
         return clients;
+
+    }
+
+    //Check client
+    public Boolean exists(Client client){
+
+        int count=0;
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(CHECK_CLIENT, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+            stmt.setInt(1, client.getCode());
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            resultSet.next();
+
+            count = resultSet.getInt(1);
+
+        }
+        catch(Exception e){
+
+            System.out.println(e);
+
+        }
+
+        return count>0;
 
     }
 
