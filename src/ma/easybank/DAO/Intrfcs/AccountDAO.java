@@ -13,6 +13,4 @@ public interface AccountDAO {
 
      Boolean delete(Account account);
 
-     Boolean changeState(Account account, State state);
-
 }

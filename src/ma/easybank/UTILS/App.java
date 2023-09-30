@@ -7,10 +7,7 @@ import ma.easybank.DTO.*;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class App {
 
@@ -41,6 +38,7 @@ public class App {
             "Affficher la liste des comptes par etat",
             "Afficher la liste des comptes par date",
             "Afficher l'historique affectations d'un employé",
+            "Mettre à jour un employé",
             "mettre à jour un client"
     };
 
@@ -54,7 +52,7 @@ public class App {
     public static SavingsaccntService savingsaccntService;
     public static OperationService operationService;
     public static MissionService missionService;
-    //public static AssignmentService assignmentService;
+    public static AssignmentService assignmentService;
 
 
     public static EmployeeDAOImpl employeeDAO;
@@ -90,7 +88,7 @@ public class App {
 
         missionService = new MissionService(connection);
 
-        //assignmentService = new AssignmentService(connection);
+        assignmentService = new AssignmentService(connection);
 
 
 
@@ -111,7 +109,7 @@ public class App {
 
         missionDAO = new MissionDAOImpl(missionService);
 
-        //assignmentDAO = new AssignmentDAOImpl(assignmentService);
+        assignmentDAO = new AssignmentDAOImpl(assignmentService);
 
     }
 
@@ -194,10 +192,10 @@ public class App {
                 deleteMission();
                 break;
             case 15:
-                //getAllEmployees();
+                getAllEmployees();
                 break;
             case 16:
-                //findEmployees();
+                findEmployees();
                 break;
             case 17:
                 getAllClients();
@@ -206,30 +204,33 @@ public class App {
                 findClients();
                 break;
             case 19:
-                //getAllAccounts();
+                getAllAccounts();
                 break;
             case 20:
-                //changeAccountState();
+                changeAccountState();
                 break;
             case 21:
-                //getAllMissions();
+                getAllMissions();
                 break;
             case 22:
-                //assign();
+                assign();
                 break;
             case 23:
-                //deleteAssignment();
+                deleteAssignment();
                 break;
             case 24:
-                //getAllAccountsByState();
+                getAllAccountsByState();
                 break;
             case 25:
-                //getAllAccountsByDate();
+                getAllAccountsByDate();
                 break;
             case 26:
                 //getAsnmntsHistoryByEmpl();
                 break;
             case 27:
+                updateEmployee();
+                break;
+            case 28:
                 modifyClient();
                 break;
             default:
@@ -354,6 +355,316 @@ public class App {
         System.out.println("--------------------------------------------------------------------");
 
     }
+
+    public static void getAllEmployees(){
+
+        System.out.println("----------------------Tous les employés--------------------------");
+
+        displayEmployees(EmployeeDAOImpl.findAll(employeeService));
+
+        System.out.println("-----------------------------------------------------------------");
+
+    }
+
+    public static void findEmployees() {
+
+        System.out.println("----------------------Chercher un Employé--------------------------");
+
+        String[] fields = {"Prenom", "Nom", "Date de naissance", "Adresse", "Numero de Tel", "Date de recrutement", "Adresse mail"};
+
+        showOptions(fields);
+
+        int choice = takeInput(1, fields.length);
+
+        switch (choice) {
+
+            case 1:
+                findEmployeesByFirstName();
+                break;
+            case 2:
+                findEmployeesByLastName();
+                break;
+            case 3:
+                findEmployeesByBirthDate();
+                break;
+            case 4:
+                findEmployeesByAddress();
+                break;
+            case 5:
+                findEmployeesByPhoneNbr();
+                break;
+            case 6:
+                findEmployeesByRcrtmntDate();
+                break;
+            case 7:
+                findEmployeesByMailAddress();
+                break;
+            default:
+                break;
+        }
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void findEmployeesByFirstName(){
+
+        System.out.println("----------------------Chercher un Employé par prénom--------------------------");
+
+        String[] fields = {"Prenom"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Prenom")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByFirstName(filledFields.get("Prenom"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+
+    }
+
+    public static void findEmployeesByLastName(){
+
+        System.out.println("----------------------Chercher un Employé par nom--------------------------");
+
+        String[] fields = {"Nom"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Nom")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByLastName(filledFields.get("Nom"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+
+    }
+
+    public static void findEmployeesByAddress(){
+
+        System.out.println("----------------------Chercher un Employé par Adresse--------------------------");
+
+        String[] fields = {"Adresse"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Adresse")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByAddress(filledFields.get("Adresse"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void findEmployeesByPhoneNbr(){
+
+        System.out.println("----------------------Chercher un Employé par Numéro de Tél--------------------------");
+
+        String[] fields = {"N TEL"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("N TEL")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByPhoneNbr(filledFields.get("N TEL"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+    }
+
+    public static void findEmployeesByMailAddress(){
+
+        System.out.println("----------------------Chercher un Employé par Adresse Mail--------------------------");
+
+        String[] fields = {"E-MAIL"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        //Objects Creation
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("E-MAIL")){
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+
+        displayEmployees(EmployeeDAOImpl.findByMailAdrs(filledFields.get("E-MAIL"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void findEmployeesByBirthDate(){
+
+        System.out.println("----------------------Chercher un Employé par date de naissance--------------------------");
+
+        String[] fields = {"Date de naissance"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        //Objects Creation
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Date de naissance")){
+                attribut.setMandatory();
+                attribut.setType("date");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        displayEmployees(EmployeeDAOImpl.findByBirthDate(filledFields.get("Date de naissance"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void findEmployeesByRcrtmntDate(){
+
+        System.out.println("----------------------Chercher un Employé par date de recrutement--------------------------");
+
+        String[] fields = {"Date de recrutement"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        //Objects Creation
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Date de recrutement")){
+                attribut.setMandatory();
+                attribut.setType("date");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        displayEmployees(EmployeeDAOImpl.findByRcrtmntDate(filledFields.get("Date de recrutement"),employeeService));
+
+        System.out.println("-----------------------------------------------------------------------------");
+
+    }
+
+    public static void updateEmployee(){
+
+        System.out.println("----------------------Modification d'un Employe--------------------------");
+
+        String[] fields = {"Matricule","Prenom", "Nom", "Date de naissance", "Adresse", "N° Tel","Date de recrutement","Adresse Mail"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Matricule")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+
+            if(field.equals("Prenom") || field.equals("Nom") || field.equals("Adresse") || field.equals("Adresse Mail")){
+                attribut.setMandatory();
+            }
+
+            if(field.equals("Date de naissance") || field.equals("Date de recrutement")){
+                attribut.setType("date");
+                attribut.setMandatory();
+            }
+
+            if(field.equals("N° Tel")){
+                attribut.setType("number");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Employee employee = new Employee(Integer.valueOf(filledFields.get("Matricule")),filledFields.get("Prenom"),filledFields.get("Nom"), Helpers.strToDate(filledFields.get("Date de naissance")),filledFields.get("Adresse"),
+                filledFields.get("N° Tel"),Helpers.strToDate(filledFields.get("Date de recrutement")),filledFields.get("Adresse Mail"));
+
+        displayEmployee(employeeDAO.update(employee));
+
+        System.out.println("--------------------------------------------------------------------");
+
+    }
+
+
+
 
 
     //-------------------------------------------------Clients-------------------------------
@@ -854,6 +1165,97 @@ public class App {
 
     }
 
+    public static void getAllAccounts(){
+        System.out.println("----------------------Tous les comptes--------------------------");
+
+        System.out.println("----------------------Les comptes courants--------------------------");
+
+        displayAccounts(AccountDAOImpl.findAll(accountService).get("current"));
+
+        System.out.println("----------------------Les comptes d'epargne--------------------------");
+
+        displayAccounts(AccountDAOImpl.findAll(accountService).get("savings"));
+
+        System.out.println("-----------------------------------------------------------------");
+    }
+
+    public static void changeAccountState(){
+
+        System.out.println("----------------------Changement de status d'un Compte--------------------------");
+
+        String[] fields = {"Numero de compte","Active or Blocked"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Numero de compte")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+            if(field.equals("Active or Blocked")){
+                attribut.setType("state");
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Account account = new Account(Integer.valueOf(filledFields.get("Numero de compte")));
+
+        if(AccountDAOImpl.changeState(account,State.valueOf(filledFields.get("Active or Blocked")),accountService))
+        {
+            Helpers.displaySuccessMsg("L'état de compte a été modifié avec succès");
+        }else{
+            Helpers.displayErrorMsg("Aucun compte avec ce numèro!!");
+        }
+
+        System.out.println("--------------------------------------------------------------------");
+
+
+    }
+
+    public static void getAllAccountsByState(){
+
+        System.out.println("---------------------------------Tous les comptes------------------------------");
+
+        Map<String,List<Account>> accounts = AccountDAOImpl.findAllByState(accountService);
+
+        System.out.println("----------------------------------Comptes Actifs-------------------------------");
+
+        displayAccounts(accounts.get("Active"));
+
+        System.out.println("----------------------------------Comptes Bloqués------------------------------");
+
+        displayAccounts(accounts.get("Blocked"));
+
+        System.out.println("----------------------------------Comptes Supprimés-----------------------------");
+
+        displayAccounts(accounts.get("Deleted"));
+
+        System.out.println("---------------------------------------------------------------------------------");
+
+    }
+
+    public static void getAllAccountsByDate(){
+
+        System.out.println("---------------------------------Tous les comptes par date------------------------------");
+
+        AccountDAOImpl.findAllByDate(accountService).forEach((crnDate, accounts) -> {
+            System.out.println("Date: " + Helpers.localDateToStr(crnDate)+"\n");
+            accounts.forEach(account -> System.out.println(account));
+        });
+
+        System.out.println("---------------------------------------------------------------------------------");
+
+    }
+
 
     //------------------------------------------------Operations------------------------------
 
@@ -1061,6 +1463,84 @@ public class App {
         System.out.println("--------------------------------------------------------------------");
     }
 
+    public static void getAllMissions(){
+
+        System.out.println("----------------------Toutes les missions--------------------------");
+
+        displayMissions(MissionDAOImpl.findAll(missionService));
+
+        System.out.println("-----------------------------------------------------------------");
+
+    }
+
+
+    public static void assign(){
+
+        System.out.println("----------------------Creation d'une affectation--------------------------");
+
+        String[] fields = {"Code mission", "Matricule employe"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Code mission") || field.equals("Matricule employe")){
+                attribut.setMandatory();
+                attribut.setType("number");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Assignment assignment = new Assignment(new Mission(Integer.parseInt(filledFields.get("Code mission"))),new Employee(Integer.parseInt(filledFields.get("Matricule employe"))));
+
+        displayAssignment(assignmentDAO.save(assignment));
+
+        System.out.println("--------------------------------------------------------------------");
+
+    }
+
+    public static void deleteAssignment(){
+
+        System.out.println("----------------------Suppression d'une affectation--------------------------");
+
+        String[] fields = {"Id Affectation"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Id Affectation")){
+                attribut.setMandatory();
+                attribut.setType("number");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Assignment assignment = new Assignment(Integer.valueOf(filledFields.get("Id Affectation")));
+
+        if(assignmentDAO.delete(assignment)){
+            Helpers.displaySuccessMsg("Affectation supprimée avec succès");
+        }else{
+            Helpers.displayErrorMsg("L'Opération a echoué!!");
+        }
+
+        System.out.println("--------------------------------------------------------------------");
+
+    }
+
 
 
 
@@ -1122,8 +1602,26 @@ public class App {
     //---------------------------------------------Employee-------------------------------
     public static void displayEmployee(Employee employee){
         System.out.println("-------------------------------------------------------");
-        System.out.println(employee);
+        if(employee!=null){
+            System.out.println(employee);
+        }
         System.out.println("-------------------------------------------------------");
+    }
+
+    public static void displayEmployees(List<Employee> employees){
+
+        System.out.println("-------------------------------------------------------");
+
+        if(employees==null || employees.isEmpty()){
+            System.out.println("Rien à Afficher");
+        }
+
+        for (Employee employee : employees) {
+            System.out.println(employee);
+        }
+
+        System.out.println("-------------------------------------------------------");
+
     }
 
     //---------------------------------------------Client--------------------------------
@@ -1134,6 +1632,7 @@ public class App {
         }
         System.out.println("-------------------------------------------------------");
     }
+
 
     public static void displayClients(List<Client> clients){
 
@@ -1188,6 +1687,26 @@ public class App {
     public static void displayMission(Mission mission){
         System.out.println("-------------------------------------------------------");
         System.out.println(mission);
+        System.out.println("-------------------------------------------------------");
+    }
+
+    public static void displayMissions(List<Mission> missions){
+        if(missions==null || missions.isEmpty()){
+            System.out.println("Rien à afficher");
+        }else{
+            for (Mission mission : missions) {
+
+                System.out.println(mission);
+
+            }
+        }
+    }
+
+    //-----------------------------------------Assignments-------------------------------------
+
+    public static void displayAssignment(Assignment assignment){
+        System.out.println("-------------------------------------------------------");
+        System.out.println(assignment);
         System.out.println("-------------------------------------------------------");
     }
 
