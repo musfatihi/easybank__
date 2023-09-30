@@ -15,6 +15,8 @@ public class EmployeeService {
 
     private static final String SAVE_EMPLOYEE = "insert into employees (firstname,lastname, birthdate, address, phonenumber, rcrtmntdate, mailaddress) values (?,?,?,?,?,?,?) returning mtrcltnbr";
 
+    private static final String UPDATE_EMPLOYEE = "update employees set firstname=?,lastname=?,birthdate=?,address=?,phonenumber=?,rcrtmntdate=?,mailaddress=? where mtrcltnbr=?";
+
     private static final String DELETE_EMPLOYEE = "update employees set deleted=true where mtrcltNbr=?";
 
     private static final String FIND_EMPLOYEE_MTRCL = "select * from employees where mtrcltNbr=?";
@@ -57,6 +59,40 @@ public class EmployeeService {
         }
 
         return employee;
+
+    }
+
+    //Employee Saving
+    public Employee updateEmployee(Employee employee) {
+
+        int updatedRows = 0;
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(UPDATE_EMPLOYEE, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+            stmt.setString(1, employee.getFirstName());
+            stmt.setString(2, employee.getLastName());
+            stmt.setDate(3, java.sql.Date.valueOf(employee.getBirthDate()));
+            stmt.setString(4, employee.getAddress());
+            stmt.setString(5, employee.getPhoneNumber());
+            stmt.setDate(6, java.sql.Date.valueOf(employee.getRcrtmntDate()));
+            stmt.setString(7, employee.getMailAddress());
+
+            stmt.setInt(8,employee.getMtrcltNbr());
+
+            updatedRows = stmt.executeUpdate();
+
+            if(updatedRows>0){
+                return employee;
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return null;
 
     }
 
