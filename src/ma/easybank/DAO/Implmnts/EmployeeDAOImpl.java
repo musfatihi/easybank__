@@ -23,6 +23,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
+    public Employee update(Employee employee) {
+        return employeeService.updateEmployee(employee);
+    }
+
+    @Override
     public Optional<Employee> findBy(Employee employee) {
         return employeeService.findEmployeeByMtrcl(employee.getMtrcltNbr());
     }
@@ -79,4 +84,5 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                 .filter(employee -> employee.getRcrtmntDate().equals(Helpers.strToDate(rcrtmntDate)))
                 .collect(Collectors.toList());
     }
+
 }
