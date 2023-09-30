@@ -223,7 +223,7 @@ public class App {
                 getAllAccountsByDate();
                 break;
             case 26:
-                //getAsnmntsHistoryByEmpl();
+                getAsnmntsHistoryByEmpl();
                 break;
             default:
                 break;
@@ -1441,6 +1441,38 @@ public class App {
 
     }
 
+    public static void getAsnmntsHistoryByEmpl(){
+
+        System.out.println("----------------------Historique affectations Employé--------------------------");
+
+        String[] fields = {"Matricule"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Matricule")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Employee employee = new Employee(Integer.valueOf(filledFields.get("Matricule")));
+
+        displayAssignments(assignmentDAO.findBy(employee));
+
+        System.out.println("--------------------------------------------------------------------");
+
+
+    }
+
 
 
 
@@ -1604,6 +1636,17 @@ public class App {
         System.out.println("-------------------------------------------------------");
         System.out.println(assignment);
         System.out.println("-------------------------------------------------------");
+    }
+
+    public static void displayAssignments(List<Assignment> assignments){
+
+        if(assignments==null || assignments.isEmpty()){
+            System.out.println("Rien à afficher");
+        }else{
+            for (Assignment assignment : assignments) {
+                System.out.println(assignment);
+            }
+        }
     }
 
 

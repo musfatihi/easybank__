@@ -23,7 +23,7 @@ public class AssignmentDAOImpl implements AssignmentDAO {
 
     @Override
     public List<Assignment> findBy(Employee employee) {
-        return null;
+        return assignmentService.findByEmployee(employee);
     }
 
     @Override
