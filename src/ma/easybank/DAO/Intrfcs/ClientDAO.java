@@ -9,6 +9,8 @@ public interface ClientDAO {
 
     Client save(Client client);
 
+    Client update(Client client);
+
     Optional<Client> findBy(Client client);
 
     Boolean delete(Client client);

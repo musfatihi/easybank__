@@ -23,6 +23,11 @@ public class ClientDAOImpl implements ClientDAO {
     }
 
     @Override
+    public Client update(Client client) {
+        return clientService.updateClient(client);
+    }
+
+    @Override
     public Optional<Client> findBy(Client client) {
         return clientService.findClientByCode(client.getCode());
     }

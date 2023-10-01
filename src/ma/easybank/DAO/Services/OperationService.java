@@ -1,9 +1,6 @@
 package ma.easybank.DAO.Services;
 
-import ma.easybank.DTO.Account;
-import ma.easybank.DTO.Employee;
-import ma.easybank.DTO.Operation;
-import ma.easybank.DTO.Type;
+import ma.easybank.DTO.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,6 +17,9 @@ public class OperationService {
     private static final String DELETE_OPERATION = "update operations set deleted=true where nbr=?";
 
     private static final String FIND_OPERATION_NBR = "select * from operations where nbr=?";
+
+    private static final String FIND_ACCOUNT_OPR_NBR = "select accounts.* from operations inner join accounts on operations.accnbr=accounts.nbr where operations.nbr=? ";
+
 
 
 
@@ -106,6 +106,37 @@ public class OperationService {
                 Operation operation = new Operation(resultSet.getInt(1), resultSet.getDate(2).toLocalDate(), Type.valueOf(resultSet.getString(3)), resultSet.getDouble(4), new Account(resultSet.getInt(5)), new Employee(resultSet.getInt(6)));
 
                 return Optional.of(operation);
+
+            }
+
+        }
+        catch(Exception e){
+
+            System.out.println(e);
+
+        }
+
+        return Optional.empty();
+
+    }
+
+    //Find Account By Operation nbr
+    public Optional<Account> findAccountByOprNbr(Operation operation){
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(FIND_ACCOUNT_OPR_NBR, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+            stmt.setInt(1, operation.getNbr());
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                Account account = new Account(resultSet.getInt(1),resultSet.getDouble(2),resultSet.getDate(3).toLocalDate(), State.valueOf(resultSet.getString(4)),new Client(resultSet.getInt(5)),new Employee(resultSet.getInt(6)));
+
+                return Optional.of(account);
 
             }
 

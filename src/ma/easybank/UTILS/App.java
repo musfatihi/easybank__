@@ -37,6 +37,10 @@ public class App {
             "Supprimer une affectation",
             "Affficher la liste des comptes par etat",
             "Afficher la liste des comptes par date",
+            "Mettre à jour un employé",
+            "mettre à jour un client",
+            "modifier un compte",
+            "Chercher un compte par numèro d'opération",
             "Afficher l'historique affectations d'un employé",
             "Afficher les statistiques"
     };
@@ -224,9 +228,21 @@ public class App {
                 getAllAccountsByDate();
                 break;
             case 26:
-                getAsnmntsHistoryByEmpl();
+                updateEmployee();
                 break;
             case 27:
+                modifyClient();
+                break;
+            case 28:
+                modifyAccount();
+                break;
+            case 29:
+                findAccountByOprNbr();
+                break;
+            case 30:
+                getAsnmntsHistoryByEmpl();
+                break;
+            case 31:
                 getStats();
                 break;
             default:
@@ -614,6 +630,51 @@ public class App {
 
     }
 
+    public static void updateEmployee(){
+
+        System.out.println("----------------------Modification d'un Employe--------------------------");
+
+        String[] fields = {"Matricule","Prenom", "Nom", "Date de naissance", "Adresse", "N° Tel","Date de recrutement","Adresse Mail"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Matricule")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+
+            if(field.equals("Prenom") || field.equals("Nom") || field.equals("Adresse") || field.equals("Adresse Mail")){
+                attribut.setMandatory();
+            }
+
+            if(field.equals("Date de naissance") || field.equals("Date de recrutement")){
+                attribut.setType("date");
+                attribut.setMandatory();
+            }
+
+            if(field.equals("N° Tel")){
+                attribut.setType("number");
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Employee employee = new Employee(Integer.valueOf(filledFields.get("Matricule")),filledFields.get("Prenom"),filledFields.get("Nom"), Helpers.strToDate(filledFields.get("Date de naissance")),filledFields.get("Adresse"),
+                filledFields.get("N° Tel"),Helpers.strToDate(filledFields.get("Date de recrutement")),filledFields.get("Adresse Mail"));
+
+        displayEmployee(employeeDAO.update(employee));
+
+        System.out.println("--------------------------------------------------------------------");
+
+    }
+
 
 
 
@@ -658,6 +719,53 @@ public class App {
                 filledFields.get("N° Tel"));
 
         displayClient(clientDAO.save(client));
+
+        System.out.println("--------------------------------------------------------------------");
+
+    }
+
+    public static void modifyClient(){
+
+        System.out.println("----------------------Modification d'un Client--------------------------");
+
+        String[] fields = {"Code","Prenom", "Nom", "Date de naissance", "Adresse", "N° Tel"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Code")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+
+            if(field.equals("Prenom") || fields.equals("Nom") || fields.equals("Adresse")){
+                attribut.setMandatory();
+            }
+
+            if(field.equals("N° Tel")){
+                attribut.setMandatory();
+                attribut.setType("number");
+            }
+
+            if(field.equals("Date de naissance")){
+                attribut.setType("date");
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Client client = new Client(Integer.valueOf(filledFields.get("Code")),filledFields.get("Prenom"),filledFields.get("Nom"), Helpers.strToDate(filledFields.get("Date de naissance")),filledFields.get("Adresse"),
+                filledFields.get("N° Tel"));
+
+        displayClient(clientDAO.update(client));
 
         System.out.println("--------------------------------------------------------------------");
 
@@ -1160,6 +1268,55 @@ public class App {
 
     }
 
+    public static void modifyAccount() {
+
+        System.out.println("----------------------Modification d'un Compte--------------------------");
+
+        changeAccountState();
+
+        System.out.println("------------------------------------------------------------------------");
+
+    }
+
+    public static void findAccountByOprNbr(){
+
+        System.out.println("----------------------Chercher le compte par numéro d'opération--------------------------");
+
+        String[] fields = {"Numero d'operation"};
+
+        List<Attribut> attributs = new ArrayList<>();
+
+
+        for (String field:fields) {
+
+            Attribut attribut = new Attribut(field);
+
+            if(field.equals("Numero d'operation")){
+                attribut.setType("number");
+                attribut.setMandatory();
+            }
+
+            attributs.add(attribut);
+
+        }
+
+        HashMap<String,String> filledFields = takeInfos(attributs);
+
+        Operation operation = new Operation(Integer.valueOf(filledFields.get("Numero d'operation")));
+
+
+        System.out.println("----------------------------------Compte-----------------------------");
+
+       if(OperationDAOImpl.findAccountByOprNbr(operation).isPresent()){
+           displayAccount(OperationDAOImpl.findAccountByOprNbr(operation).get());
+       }else{
+           Helpers.displayErrorMsg("Une erreur est survenue!!");
+       }
+
+        System.out.println("--------------------------------------------------------------------");
+
+    }
+
 
     //------------------------------------------------Operations------------------------------
 
@@ -1548,7 +1705,9 @@ public class App {
     //---------------------------------------------Employee-------------------------------
     public static void displayEmployee(Employee employee){
         System.out.println("-------------------------------------------------------");
-        System.out.println(employee);
+        if(employee!=null){
+            System.out.println(employee);
+        }
         System.out.println("-------------------------------------------------------");
     }
 
@@ -1571,7 +1730,9 @@ public class App {
     //---------------------------------------------Client--------------------------------
     public static void displayClient(Client client){
         System.out.println("-------------------------------------------------------");
-        System.out.println(client);
+        if(client!=null){
+            System.out.println(client);
+        }
         System.out.println("-------------------------------------------------------");
     }
 
@@ -1621,7 +1782,9 @@ public class App {
     //--------------------------------------------Operation-------------------------------
 
     public static void displayOperation(Operation operation){
+        System.out.println("-------------------------------------------------------");
         System.out.println(operation);
+        System.out.println("-------------------------------------------------------");
     }
 
     //----------------------------------------Mission--------------------------------------

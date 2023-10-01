@@ -8,6 +8,8 @@ public interface EmployeeDAO {
 
     Employee save(Employee employee);
 
+    Employee update(Employee employee);
+
     Optional<Employee> findBy(Employee employee);
 
     Boolean delete(Employee employee);
