@@ -1,5 +1,7 @@
 package ma.easybank.DTO;
 
+import ma.easybank.UTILS.Helpers;
+
 import java.time.LocalDate;
 
 public class Assignment {
@@ -84,7 +86,9 @@ public class Assignment {
 
     @Override
     public String toString() {
-        return "Mission : "+this.mission.getName()+"\n"+"Description : "+this.mission.getDescription()+"\n"+
-                "Du : "+this.startDate+"\n"+"Au : "+(this.endDate!=null?this.endDate:"--")+"\n";
+        return "Mission : "+this.mission.getCode()+"\n"+"Opérateur : "+this.employee.getMtrcltNbr()+"\n"+
+                "Du : "+ Helpers.localDateToStr(this.startDate)+"\n"+"Au : "+(this.endDate!=null?Helpers.localDateToStr(this.endDate):"--")+"\n";
+
     }
+
 }
