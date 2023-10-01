@@ -1,5 +1,6 @@
 package ma.easybank.DAO.Services;
 
+import ma.easybank.DTO.Account;
 import ma.easybank.DTO.Mission;
 
 import java.sql.Connection;
@@ -17,6 +18,8 @@ public class MissionService {
     private static final String DELETE_MISSION = "update missions set deleted=true where code=?";
 
     private static final String FIND_ALL_MISSIONS = "select * from missions where deleted=false";
+
+    private static final String CHECK_MISSION = "select * from missions where code=? and deleted=false";
 
 
 
@@ -104,6 +107,35 @@ public class MissionService {
         }
 
         return missions;
+
+    }
+
+    //Check mission
+    public Boolean exists(Mission mission){
+
+        int count=0;
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(CHECK_MISSION, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+            stmt.setInt(1, mission.getCode());
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            resultSet.next();
+
+            count = resultSet.getInt(1);
+
+        }
+        catch(Exception e){
+
+            System.out.println(e);
+
+        }
+
+        return count>0;
 
     }
 
