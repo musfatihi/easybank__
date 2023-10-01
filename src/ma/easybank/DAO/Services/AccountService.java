@@ -26,6 +26,9 @@ public class AccountService {
 
     private static final String CHANGE_STATE = "update accounts set state=? where nbr=?";
 
+    private static final String CHECK_ACCOUNT = "select count(*) from accounts where nbr=? and deleted=false";
+
+
     //Constructor
     public AccountService(Connection connection) {
 
@@ -183,6 +186,35 @@ public class AccountService {
         }
 
         return rowsUpdated>0;
+
+    }
+
+    //Check account
+    public Boolean exists(Account account){
+
+        int count=0;
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(CHECK_ACCOUNT, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+            stmt.setInt(1, account.getNbr());
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            resultSet.next();
+
+            count = resultSet.getInt(1);
+
+        }
+        catch(Exception e){
+
+            System.out.println(e);
+
+        }
+
+        return count>0;
 
     }
 
