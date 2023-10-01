@@ -1606,7 +1606,7 @@ public class App {
 
         System.out.println("----------------------Historique affectations Employé--------------------------");
 
-        String[] fields = {"Matricule"};
+        String[] fields = {"Operateur"};
 
         List<Attribut> attributs = new ArrayList<>();
 
@@ -1614,7 +1614,7 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Matricule")){
+            if(field.equals("Operateur")){
                 attribut.setType("number");
                 attribut.setMandatory();
             }
@@ -1625,7 +1625,7 @@ public class App {
 
         HashMap<String,String> filledFields = takeInfos(attributs);
 
-        Employee employee = new Employee(Integer.valueOf(filledFields.get("Matricule")));
+        Employee employee = new Employee(Integer.valueOf(filledFields.get("Operateur")));
 
         displayAssignments(assignmentDAO.findBy(employee));
 
@@ -1687,7 +1687,11 @@ public class App {
                     (attribut.getType().equals("date") && !Helpers.isValidDate(input)) ||
                             (attribut.getType().equals("number") && !Helpers.isNumber(input)) ||
                             (attribut.isMandatory() && input.equals("")) ||
-                            (attribut.getType().equals("state") && !Helpers.isValidState(input) )
+                            (attribut.getType().equals("state") && !Helpers.isValidState(input) ) ||
+                            (attribut.getName().equals("Operateur") && !attribut.employeeExists(new Employee(Integer.valueOf(input)))) ||
+                            (attribut.getName().equals("Client") && !attribut.clientExists(new Client(Integer.valueOf(input)))) ||
+                            (attribut.getName().equals("Compte") && !attribut.accountExists(new Account(Integer.valueOf(input)))) ||
+                            (attribut.getName().equals("Mission") && !attribut.missionExists(new Mission(Integer.valueOf(input))))
             );
 
 
@@ -1832,11 +1836,5 @@ public class App {
             System.out.println(key + " : " + value);
         }
     }
-
-
-
-
-
-
 
 }

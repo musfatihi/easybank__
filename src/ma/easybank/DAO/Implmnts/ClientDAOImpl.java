@@ -1,6 +1,6 @@
 package ma.easybank.DAO.Implmnts;
 
-import ma.easybank.DAO.Intrfcs.ClientDAO;
+import ma.easybank.DAO.Intrfcs.GenericInterface;
 import ma.easybank.DAO.Services.ClientService;
 import ma.easybank.DTO.Client;
 import ma.easybank.UTILS.Helpers;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ClientDAOImpl implements ClientDAO {
+public class ClientDAOImpl implements GenericInterface<Client> {
 
     public static ClientService clientService;
 

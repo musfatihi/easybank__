@@ -1,6 +1,6 @@
 package ma.easybank.DAO.Implmnts;
 
-import ma.easybank.DAO.Intrfcs.EmployeeDAO;
+import ma.easybank.DAO.Intrfcs.GenericInterface;
 import ma.easybank.DAO.Services.EmployeeService;
 import ma.easybank.DTO.Employee;
 import ma.easybank.UTILS.Helpers;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class EmployeeDAOImpl implements EmployeeDAO {
+public class EmployeeDAOImpl implements GenericInterface<Employee> {
 
     public static EmployeeService employeeService;
 
