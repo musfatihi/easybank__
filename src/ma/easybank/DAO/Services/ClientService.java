@@ -5,6 +5,8 @@ import ma.easybank.DTO.Client;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -14,9 +16,14 @@ public class ClientService {
 
     private static final String SAVE_CLIENT = "insert into clients (firstname,lastname, birthdate, address, phonenumber) values (?,?,?,?,?) returning code";
 
+    private static final String UPDATE_CLIENT = "update clients set firstname=?,lastname=?,birthdate=?,address=?,phonenumber=? where code=?";
+
     private static final String DELETE_CLIENT = "update clients set deleted=true where code=?";
 
     private static final String FIND_CLIENT_CODE = "select * from clients where code=?";
+
+    private static final String FIND_ALL_CLIENTS = "select * from clients where deleted!=true";
+
 
 
     //Constructor
@@ -52,6 +59,39 @@ public class ClientService {
         }
 
         return client;
+
+    }
+
+    //Client Updating
+    public Client updateClient(Client client) {
+
+        int updatedRows=0;
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(UPDATE_CLIENT);
+
+            stmt.setString(1, client.getFirstName());
+            stmt.setString(2, client.getLastName());
+            stmt.setDate(3, java.sql.Date.valueOf(client.getBirthDate()));
+            stmt.setString(4, client.getAddress());
+            stmt.setString(5, client.getPhoneNumber());
+
+            stmt.setInt(6, client.getCode());
+
+            updatedRows = stmt.executeUpdate();
+
+            if(updatedRows>0){
+                return client;
+            }
+
+        } catch (Exception e) {
+
+            System.out.println(e);
+
+        }
+
+        return null;
 
     }
 
@@ -107,6 +147,37 @@ public class ClientService {
         }
 
         return Optional.empty();
+
+    }
+
+    //Find All Clients
+    public List<Client> findAllClients() {
+
+        List<Client> clients = new ArrayList<>();
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(FIND_ALL_CLIENTS, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE);
+
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+
+                Client client = new Client(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3),resultSet.getDate(4).toLocalDate(),resultSet.getString(5),resultSet.getString(6));
+
+                clients.add(client);
+
+            }
+
+        }
+        catch(Exception e){
+
+            System.out.println(e);
+
+        }
+
+        return clients;
 
     }
 
