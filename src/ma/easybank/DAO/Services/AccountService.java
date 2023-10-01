@@ -78,7 +78,7 @@ public class AccountService {
 
             while (resultSet.next()) {
 
-                Account account = new Currentaccnt(resultSet.getInt(1),resultSet.getFloat(2),resultSet.getDate(3).toLocalDate(), State.valueOf(resultSet.getString(4)),new Client(resultSet.getInt(5)),new Employee(resultSet.getInt(6)),resultSet.getFloat(7));
+                Account account = new Currentaccnt(resultSet.getInt(1),resultSet.getFloat(2),resultSet.getDate(3).toLocalDate(), State.valueOf(resultSet.getString(4)),new Client(resultSet.getInt(5)),new Employee(resultSet.getInt(6)),resultSet.getDouble(7));
 
                 accounts.add(account);
 
@@ -130,7 +130,7 @@ public class AccountService {
 
             while (resultSet1.next()) {
 
-                Account account = new Currentaccnt(resultSet1.getInt(1),resultSet1.getFloat(2),resultSet1.getDate(3).toLocalDate(), State.valueOf(resultSet1.getString(4)),new Client(resultSet1.getInt(5)),new Employee(resultSet1.getInt(6)),resultSet1.getFloat(7));
+                Account account = new Currentaccnt(resultSet1.getInt(1),resultSet1.getFloat(2),resultSet1.getDate(3).toLocalDate(), State.valueOf(resultSet1.getString(4)),new Client(resultSet1.getInt(5)),new Employee(resultSet1.getInt(6)),resultSet1.getDouble(7));
 
                 currentAccounts.add(account);
 

@@ -4,13 +4,13 @@ import java.time.LocalDate;
 
 public class Currentaccnt extends Account{
 
-    private float overdraft;
+    private double overdraft;
 
     public Currentaccnt(){
 
     }
 
-    public Currentaccnt(Employee employee,Client client,float overdraft){
+    public Currentaccnt(Employee employee,Client client,double overdraft){
 
         super(employee,client);
         this.overdraft = overdraft;
@@ -18,7 +18,7 @@ public class Currentaccnt extends Account{
     }
 
 
-    public Currentaccnt(int nbr, float balance, LocalDate crtnDate, State state, Client client, Employee createdBy,float overdraft){
+    public Currentaccnt(int nbr, float balance, LocalDate crtnDate, State state, Client client, Employee createdBy,double overdraft){
 
         super(nbr, balance, crtnDate, state, client, createdBy);
 
@@ -26,11 +26,11 @@ public class Currentaccnt extends Account{
 
     }
 
-    public float getOverdraft() {
+    public double getOverdraft() {
         return overdraft;
     }
 
-    public void setOverdraft(float overdraft) {
+    public void setOverdraft(double overdraft) {
         this.overdraft = overdraft;
     }
 

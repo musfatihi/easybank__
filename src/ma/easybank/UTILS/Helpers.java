@@ -1,6 +1,7 @@
 package ma.easybank.UTILS;
 
 import ma.easybank.DTO.State;
+import ma.easybank.DTO.Type;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -88,6 +89,59 @@ public class Helpers {
         }
 
         return false;
+
+    }
+
+    public static Boolean isValidType(String valueToCheck){
+
+        for (Type enumValue : Type.values()) {
+
+            if (enumValue.name().equals(valueToCheck)) {
+                return true;
+
+            }
+
+        }
+
+        return false;
+
+    }
+
+    public static Boolean isValidAmount(String amount){
+
+        double amnt;
+
+        try {
+            amnt = Double.parseDouble(amount);
+        }
+        catch (Exception e) {
+            return false;
+        }
+
+        if(amnt<=0){
+            return false;
+        }
+
+        return true;
+
+    }
+
+    public static Boolean isValidPercentage(String percentage){
+
+        double percent;
+
+        try {
+            percent = Double.parseDouble(percentage);
+        }
+        catch (Exception e) {
+            return false;
+        }
+
+        if(percent<0 || percent>100){
+            return false;
+        }
+
+        return true;
 
     }
 

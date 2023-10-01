@@ -35,13 +35,13 @@ public class App {
             "Afficher toutes les missions",
             "Créer une nouvelle affectation",
             "Supprimer une affectation",
-            "Affficher la liste des comptes par etat",
+            "Affficher la liste des comptes par état",
             "Afficher la liste des comptes par date",
             "Mettre à jour un employé",
-            "mettre à jour un client",
-            "modifier un compte",
+            "Mettre à jour un client",
+            "Modifier un compte",
             "Chercher un compte par numèro d'opération",
-            "Afficher l'historique affectations d'un employé",
+            "Afficher l'historique des affectations d'un employé",
             "Afficher les statistiques"
     };
 
@@ -276,10 +276,6 @@ public class App {
                 attribut.setMandatory();
             }
 
-            if(field.equals("N° Tel")){
-                attribut.setType("number");
-            }
-
             attributs.add(attribut);
 
         }
@@ -303,7 +299,6 @@ public class App {
 
         List<Attribut> attributs = new ArrayList<>();
 
-
         for (String field:fields) {
 
             Attribut attribut = new Attribut(field);
@@ -323,9 +318,9 @@ public class App {
 
 
         if(employeeDAO.delete(employee)){
-            Helpers.displaySuccessMsg("Employe supprimé avec succès");
+            Helpers.displaySuccessMsg("Employé supprimé avec succès");
         }else{
-            Helpers.displayErrorMsg("Aucun Employe avec ce matricule");
+            Helpers.displayErrorMsg("Aucun Employé avec ce matricule");
         }
 
         System.out.println("----------------------------------------------------------------------------");
@@ -372,7 +367,7 @@ public class App {
 
         System.out.println("----------------------Tous les employés--------------------------");
 
-        displayEmployees(EmployeeDAOImpl.findAll(employeeService));
+        displayEmployees(EmployeeDAOImpl.findAll());
 
         System.out.println("-----------------------------------------------------------------");
 
@@ -442,7 +437,7 @@ public class App {
         HashMap<String,String> filledFields = takeInfos(attributs);
 
 
-        displayEmployees(EmployeeDAOImpl.findByFirstName(filledFields.get("Prenom"),employeeService));
+        displayEmployees(EmployeeDAOImpl.findByFirstName(filledFields.get("Prenom")));
 
         System.out.println("-----------------------------------------------------------------------------");
 
@@ -472,7 +467,7 @@ public class App {
         HashMap<String,String> filledFields = takeInfos(attributs);
 
 
-        displayEmployees(EmployeeDAOImpl.findByLastName(filledFields.get("Nom"),employeeService));
+        displayEmployees(EmployeeDAOImpl.findByLastName(filledFields.get("Nom")));
 
         System.out.println("-----------------------------------------------------------------------------");
 
@@ -502,7 +497,7 @@ public class App {
         HashMap<String,String> filledFields = takeInfos(attributs);
 
 
-        displayEmployees(EmployeeDAOImpl.findByAddress(filledFields.get("Adresse"),employeeService));
+        displayEmployees(EmployeeDAOImpl.findByAddress(filledFields.get("Adresse")));
 
         System.out.println("-----------------------------------------------------------------------------");
 
@@ -532,7 +527,7 @@ public class App {
         HashMap<String,String> filledFields = takeInfos(attributs);
 
 
-        displayEmployees(EmployeeDAOImpl.findByPhoneNbr(filledFields.get("N TEL"),employeeService));
+        displayEmployees(EmployeeDAOImpl.findByPhoneNbr(filledFields.get("N TEL")));
 
         System.out.println("-----------------------------------------------------------------------------");
     }
@@ -562,7 +557,7 @@ public class App {
         HashMap<String,String> filledFields = takeInfos(attributs);
 
 
-        displayEmployees(EmployeeDAOImpl.findByMailAdrs(filledFields.get("E-MAIL"),employeeService));
+        displayEmployees(EmployeeDAOImpl.findByMailAdrs(filledFields.get("E-MAIL")));
 
         System.out.println("-----------------------------------------------------------------------------");
 
@@ -593,7 +588,7 @@ public class App {
 
         HashMap<String,String> filledFields = takeInfos(attributs);
 
-        displayEmployees(EmployeeDAOImpl.findByBirthDate(filledFields.get("Date de naissance"),employeeService));
+        displayEmployees(EmployeeDAOImpl.findByBirthDate(filledFields.get("Date de naissance")));
 
         System.out.println("-----------------------------------------------------------------------------");
 
@@ -624,7 +619,7 @@ public class App {
 
         HashMap<String,String> filledFields = takeInfos(attributs);
 
-        displayEmployees(EmployeeDAOImpl.findByRcrtmntDate(filledFields.get("Date de recrutement"),employeeService));
+        displayEmployees(EmployeeDAOImpl.findByRcrtmntDate(filledFields.get("Date de recrutement")));
 
         System.out.println("-----------------------------------------------------------------------------");
 
@@ -656,9 +651,6 @@ public class App {
                 attribut.setMandatory();
             }
 
-            if(field.equals("N° Tel")){
-                attribut.setType("number");
-            }
 
             attributs.add(attribut);
 
@@ -701,7 +693,6 @@ public class App {
 
             if(field.equals("N° Tel")){
                 attribut.setMandatory();
-                attribut.setType("number");
             }
 
             if(field.equals("Date de naissance")){
@@ -748,7 +739,6 @@ public class App {
 
             if(field.equals("N° Tel")){
                 attribut.setMandatory();
-                attribut.setType("number");
             }
 
             if(field.equals("Date de naissance")){
@@ -846,7 +836,7 @@ public class App {
 
         System.out.println("----------------------Tous les clients--------------------------");
 
-        displayClients(ClientDAOImpl.findAll(clientService));
+        displayClients(ClientDAOImpl.findAll());
 
         System.out.println("-----------------------------------------------------------------");
 
@@ -911,7 +901,7 @@ public class App {
 
         HashMap<String,String> filledFields = takeInfos(attributs);
 
-        displayClients(ClientDAOImpl.findByFirstName(filledFields.get("Prenom"),clientService));
+        displayClients(ClientDAOImpl.findByFirstName(filledFields.get("Prenom")));
 
     }
 
@@ -938,7 +928,7 @@ public class App {
         HashMap<String,String> filledFields = takeInfos(attributs);
 
 
-        displayClients(ClientDAOImpl.findByLastName(filledFields.get("Nom"),clientService));
+        displayClients(ClientDAOImpl.findByLastName(filledFields.get("Nom")));
 
     }
 
@@ -965,7 +955,7 @@ public class App {
         HashMap<String,String> filledFields = takeInfos(attributs);
 
 
-        displayClients(ClientDAOImpl.findByAddress(filledFields.get("Adresse"),clientService));
+        displayClients(ClientDAOImpl.findByAddress(filledFields.get("Adresse")));
 
     }
 
@@ -983,7 +973,6 @@ public class App {
 
             if(field.equals("N Tel")){
                 attribut.setMandatory();
-                attribut.setType("number");
             }
 
             attributs.add(attribut);
@@ -993,7 +982,7 @@ public class App {
         HashMap<String,String> filledFields = takeInfos(attributs);
 
 
-        displayClients(ClientDAOImpl.findByPhoneNbr(filledFields.get("N Tel"),clientService));
+        displayClients(ClientDAOImpl.findByPhoneNbr(filledFields.get("N Tel")));
 
 
     }
@@ -1021,7 +1010,7 @@ public class App {
 
         HashMap<String,String> filledFields = takeInfos(attributs);
 
-        displayClients(ClientDAOImpl.findByBirthDate(filledFields.get("Date de naissance"),clientService));
+        displayClients(ClientDAOImpl.findByBirthDate(filledFields.get("Date de naissance")));
 
     }
 
@@ -1047,7 +1036,7 @@ public class App {
             System.out.println("----------------------Creation d'un Compte d'epargne--------------------------");
         }
 
-        String[] fields = {"Client", "Operateur"};
+        String[] fields = {"Code", "Matricule"};
 
         List<Attribut> attributs = new ArrayList<>();
 
@@ -1056,7 +1045,7 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Client") || field.equals("Operateur")){
+            if(field.equals("Code") || field.equals("Matricule")){
                 attribut.setType("number");
                 attribut.setMandatory();
             }
@@ -1075,11 +1064,13 @@ public class App {
 
             Attribut attribt = new Attribut(field);
 
+            attribt.setType("amount");
+
             attribts.add(attribt);
 
             HashMap<String,String> filedFields = takeInfos(attribts);
 
-            Currentaccnt currentaccnt = new Currentaccnt(new Employee(Integer.valueOf(filledFields.get("Operateur"))),new Client(Integer.valueOf(filledFields.get("Client"))),Float.parseFloat(filedFields.get("Decouvert")));
+            Currentaccnt currentaccnt = new Currentaccnt(new Employee(Integer.valueOf(filledFields.get("Matricule"))),new Client(Integer.valueOf(filledFields.get("Code"))),Double.parseDouble(filedFields.get("Decouvert")));
 
             displayAccount(currentaccntDAO.save(currentaccnt));
 
@@ -1091,11 +1082,13 @@ public class App {
 
             Attribut attribt = new Attribut(field);
 
+            attribt.setType("percentage");
+
             attribts.add(attribt);
 
             HashMap<String,String> filedFields = takeInfos(attribts);
 
-            Savingsaccnt savingsaccnt = new Savingsaccnt(new Employee(Integer.valueOf(filledFields.get("Operateur"))),new Client(Integer.valueOf(filledFields.get("Client"))),Float.parseFloat(filedFields.get("Taux d'interet")));
+            Savingsaccnt savingsaccnt = new Savingsaccnt(new Employee(Integer.valueOf(filledFields.get("Matricule"))),new Client(Integer.valueOf(filledFields.get("Code"))),Double.parseDouble(filedFields.get("Taux d'interet")));
 
             displayAccount(savingsaccntDAO.save(savingsaccnt));
 
@@ -1182,11 +1175,11 @@ public class App {
 
         System.out.println("----------------------Les comptes courants--------------------------");
 
-        displayAccounts(AccountDAOImpl.findAll(accountService).get("current"));
+        displayAccounts(AccountDAOImpl.findAll().get("current"));
 
         System.out.println("----------------------Les comptes d'epargne--------------------------");
 
-        displayAccounts(AccountDAOImpl.findAll(accountService).get("savings"));
+        displayAccounts(AccountDAOImpl.findAll().get("savings"));
 
         System.out.println("-----------------------------------------------------------------");
     }
@@ -1221,7 +1214,7 @@ public class App {
 
         Account account = new Account(Integer.valueOf(filledFields.get("Numero de compte")));
 
-        if(AccountDAOImpl.changeState(account,State.valueOf(filledFields.get("Active or Blocked")),accountService))
+        if(AccountDAOImpl.changeState(account,State.valueOf(filledFields.get("Active or Blocked"))))
         {
             Helpers.displaySuccessMsg("L'état de compte a été modifié avec succès");
         }else{
@@ -1237,7 +1230,7 @@ public class App {
 
         System.out.println("---------------------------------Tous les comptes------------------------------");
 
-        Map<String,List<Account>> accounts = AccountDAOImpl.findAllByState(accountService);
+        Map<String,List<Account>> accounts = AccountDAOImpl.findAllByState();
 
         System.out.println("----------------------------------Comptes Actifs-------------------------------");
 
@@ -1259,7 +1252,7 @@ public class App {
 
         System.out.println("---------------------------------Tous les comptes par date------------------------------");
 
-        AccountDAOImpl.findAllByDate(accountService).forEach((crnDate, accounts) -> {
+        AccountDAOImpl.findAllByDate().forEach((crnDate, accounts) -> {
             System.out.println("Date: " + Helpers.localDateToStr(crnDate)+"\n");
             accounts.forEach(account -> System.out.println(account));
         });
@@ -1310,7 +1303,7 @@ public class App {
        if(OperationDAOImpl.findAccountByOprNbr(operation).isPresent()){
            displayAccount(OperationDAOImpl.findAccountByOprNbr(operation).get());
        }else{
-           Helpers.displayErrorMsg("Une erreur est survenue!!");
+           Helpers.displayErrorMsg("Aucune opération trouvée!!");
        }
 
         System.out.println("--------------------------------------------------------------------");
@@ -1324,7 +1317,7 @@ public class App {
 
         System.out.println("----------------------Faire une opération--------------------------");
 
-        String[] fields = {"Operateur","Compte Bancaire", "Type d'operation","Montant"};
+        String[] fields = {"Matricule","Numero de compte", "Type d'operation","Montant"};
 
         List<Attribut> attributs = new ArrayList<>();
 
@@ -1333,15 +1326,23 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Operateur") || field.equals("Compte Bancaire")
-                    || field.equals("Type d'operation")){
+            if(field.equals("Matricule") || field.equals("Numero de compte")
+                    || field.equals("Type d'operation") || field.equals("Montant")){
                 attribut.setMandatory();
             }
 
-            if(field.equals("Montant")){
-                attribut.setMandatory();
+            if(field.equals("Matricule") || field.equals("Numero de compte")){
                 attribut.setType("number");
             }
+
+            if(field.equals("Montant")){
+                attribut.setType("amount");
+            }
+
+            if(field.equals("Type d'operation")){
+                attribut.setType("type");
+            }
+
 
             attributs.add(attribut);
 
@@ -1349,7 +1350,7 @@ public class App {
 
         HashMap<String,String> filledFields = takeInfos(attributs);
 
-        Operation operation = new Operation(Type.valueOf(filledFields.get("Type d'operation")),Double.parseDouble(filledFields.get("Montant")),new Account(Integer.valueOf(filledFields.get("Compte Bancaire"))),new Employee(Integer.valueOf(filledFields.get("Operateur"))));
+        Operation operation = new Operation(Type.valueOf(filledFields.get("Type d'operation")),Double.parseDouble(filledFields.get("Montant")),new Account(Integer.valueOf(filledFields.get("Numero de compte"))),new Employee(Integer.valueOf(filledFields.get("Matricule"))));
 
         if(operation.getType()==Type.Withdrawal){
 
@@ -1444,7 +1445,7 @@ public class App {
 
         }else{
 
-            Helpers.displayErrorMsg("Rien à afficher");
+            Helpers.displayErrorMsg("Aucune operation trouvée!!");
 
         }
 
@@ -1528,7 +1529,7 @@ public class App {
 
         System.out.println("----------------------Toutes les missions--------------------------");
 
-        displayMissions(MissionDAOImpl.findAll(missionService));
+        displayMissions(MissionDAOImpl.findAll());
 
         System.out.println("-----------------------------------------------------------------");
 
@@ -1539,7 +1540,7 @@ public class App {
 
         System.out.println("----------------------Creation d'une affectation--------------------------");
 
-        String[] fields = {"Code mission", "Matricule employe"};
+        String[] fields = {"Code mission", "Matricule"};
 
         List<Attribut> attributs = new ArrayList<>();
 
@@ -1547,7 +1548,7 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Code mission") || field.equals("Matricule employe")){
+            if(field.equals("Code mission") || field.equals("Matricule")){
                 attribut.setMandatory();
                 attribut.setType("number");
             }
@@ -1558,7 +1559,7 @@ public class App {
 
         HashMap<String,String> filledFields = takeInfos(attributs);
 
-        Assignment assignment = new Assignment(new Mission(Integer.parseInt(filledFields.get("Code mission"))),new Employee(Integer.parseInt(filledFields.get("Matricule employe"))));
+        Assignment assignment = new Assignment(new Mission(Integer.parseInt(filledFields.get("Code mission"))),new Employee(Integer.parseInt(filledFields.get("Matricule"))));
 
         displayAssignment(assignmentDAO.save(assignment));
 
@@ -1606,7 +1607,7 @@ public class App {
 
         System.out.println("----------------------Historique affectations Employé--------------------------");
 
-        String[] fields = {"Operateur"};
+        String[] fields = {"Matricule"};
 
         List<Attribut> attributs = new ArrayList<>();
 
@@ -1614,7 +1615,7 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Operateur")){
+            if(field.equals("Matricule")){
                 attribut.setType("number");
                 attribut.setMandatory();
             }
@@ -1625,7 +1626,7 @@ public class App {
 
         HashMap<String,String> filledFields = takeInfos(attributs);
 
-        Employee employee = new Employee(Integer.valueOf(filledFields.get("Operateur")));
+        Employee employee = new Employee(Integer.valueOf(filledFields.get("Matricule")));
 
         displayAssignments(assignmentDAO.findBy(employee));
 
@@ -1686,12 +1687,15 @@ public class App {
             }while (
                     (attribut.getType().equals("date") && !Helpers.isValidDate(input)) ||
                             (attribut.getType().equals("number") && !Helpers.isNumber(input)) ||
+                            (attribut.getType().equals("amount") && !Helpers.isValidAmount(input)) ||
+                            (attribut.getType().equals("percentage") && !Helpers.isValidPercentage(input)) ||
                             (attribut.isMandatory() && input.equals("")) ||
                             (attribut.getType().equals("state") && !Helpers.isValidState(input) ) ||
-                            (attribut.getName().equals("Operateur") && !attribut.employeeExists(new Employee(Integer.valueOf(input)))) ||
-                            (attribut.getName().equals("Client") && !attribut.clientExists(new Client(Integer.valueOf(input)))) ||
-                            (attribut.getName().equals("Compte") && !attribut.accountExists(new Account(Integer.valueOf(input)))) ||
-                            (attribut.getName().equals("Mission") && !attribut.missionExists(new Mission(Integer.valueOf(input))))
+                            (attribut.getType().equals("type") && !Helpers.isValidType(input) ) ||
+                            (attribut.getName().equals("Matricule") && !attribut.employeeExists(new Employee(Integer.valueOf(input)))) ||
+                            (attribut.getName().equals("Code") && !attribut.clientExists(new Client(Integer.valueOf(input)))) ||
+                            (attribut.getName().equals("Numero de compte") && !attribut.accountExists(new Account(Integer.valueOf(input)))) ||
+                            (attribut.getName().equals("Code Mission") && !attribut.missionExists(new Mission(Integer.valueOf(input))))
             );
 
 

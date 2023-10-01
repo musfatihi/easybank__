@@ -37,7 +37,7 @@ public class SavingsaccntService {
 
             stmt.setInt(1, savingsaccnt.getClient().getCode());
             stmt.setInt(2, savingsaccnt.getCreatedBy().getMtrcltNbr());
-            stmt.setFloat(3, savingsaccnt.getInterestrate());
+            stmt.setDouble(3, savingsaccnt.getInterestrate());
 
 
             ResultSet resultSet = stmt.executeQuery();

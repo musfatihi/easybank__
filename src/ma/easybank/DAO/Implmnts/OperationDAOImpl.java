@@ -12,8 +12,6 @@ import java.util.Optional;
 public class OperationDAOImpl implements OperationDAO {
 
     public static OperationService operationService;
-    public static CurrentaccntService currentaccntService;
-    public static SavingsaccntService savingsaccntService;
 
     public OperationDAOImpl(OperationService operationService){
         OperationDAOImpl.operationService = operationService;

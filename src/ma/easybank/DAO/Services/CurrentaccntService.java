@@ -34,7 +34,7 @@ public class CurrentaccntService {
 
             stmt.setInt(1, currentaccnt.getClient().getCode());
             stmt.setInt(2, currentaccnt.getCreatedBy().getMtrcltNbr());
-            stmt.setFloat(3, currentaccnt.getOverdraft());
+            stmt.setDouble(3, currentaccnt.getOverdraft());
 
 
             ResultSet resultSet = stmt.executeQuery();

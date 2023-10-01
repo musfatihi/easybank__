@@ -33,17 +33,17 @@ public class AccountDAOImpl implements AccountDAO {
         return accountService.deleteAccount(account);
     }
 
-    public static Map<String, List<Account>> findAll(AccountService accountService){
+    public static Map<String, List<Account>> findAll(){
 
         return accountService.findAllAccounts();
 
     }
 
-    public static Boolean changeState(Account account, State state,AccountService accountService) {
+    public static Boolean changeState(Account account, State state) {
         return accountService.changeState(account,state.toString());
     }
 
-    public static Map<String, List<Account>> findAllByState(AccountService accountService){
+    public static Map<String, List<Account>> findAllByState(){
 
         Map<String, List<Account>> currentaccnt = accountService.findAllAccounts().get("current").stream()
                 .collect(Collectors.groupingBy(
@@ -124,7 +124,7 @@ public class AccountDAOImpl implements AccountDAO {
         return combinedMap;
     }
 
-    public static Map<LocalDate, List<Account>> findAllByDate(AccountService accountService) {
+    public static Map<LocalDate, List<Account>> findAllByDate() {
 
         Map<LocalDate, List<Account>> currentaccnt = accountService.findAllAccounts().get("current").stream()
                 .collect(Collectors.groupingBy(Account::getCrtnDate));

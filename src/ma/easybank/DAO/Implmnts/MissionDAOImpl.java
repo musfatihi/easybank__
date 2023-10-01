@@ -26,7 +26,7 @@ public class MissionDAOImpl implements MissionDAO {
         return missionService.deleteMission(mission);
     }
 
-    public static List<Mission> findAll(MissionService missionService){
+    public static List<Mission> findAll(){
         return missionService.findAllMissions();
     }
 

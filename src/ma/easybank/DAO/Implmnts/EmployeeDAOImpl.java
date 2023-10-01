@@ -36,50 +36,50 @@ public class EmployeeDAOImpl implements GenericInterface<Employee> {
         return employeeService.deleteEmployee(employee);
     }
 
-    public static List<Employee> findAll(EmployeeService employeeService){
+    public static List<Employee> findAll(){
         return employeeService.findAllEmployees();
     }
 
-    public static List<Employee> findByFirstName(String firstName,EmployeeService employeeService){
+    public static List<Employee> findByFirstName(String firstName){
         return employeeService.findAllEmployees().stream()
                 .filter(employee -> employee.getFirstName().equals(firstName))
                 .collect(Collectors.toList());
     }
 
-    public static List<Employee> findByLastName(String lastName,EmployeeService employeeService){
+    public static List<Employee> findByLastName(String lastName){
         return employeeService.findAllEmployees().stream()
                 .filter(employee -> employee.getLastName().equals(lastName))
                 .collect(Collectors.toList());
     }
 
 
-    public static List<Employee> findByAddress(String address,EmployeeService employeeService){
+    public static List<Employee> findByAddress(String address){
         return employeeService.findAllEmployees().stream()
                 .filter(employee -> employee.getAddress().equals(address))
                 .collect(Collectors.toList());
     }
 
 
-    public static List<Employee> findByPhoneNbr(String phoneNbr,EmployeeService employeeService){
+    public static List<Employee> findByPhoneNbr(String phoneNbr){
         return employeeService.findAllEmployees().stream()
                 .filter(employee -> employee.getPhoneNumber().equals(phoneNbr))
                 .collect(Collectors.toList());
     }
 
-    public static List<Employee> findByMailAdrs(String mailAdrs,EmployeeService employeeService){
+    public static List<Employee> findByMailAdrs(String mailAdrs){
         return employeeService.findAllEmployees().stream()
                 .filter(employee -> employee.getMailAddress().equals(mailAdrs))
                 .collect(Collectors.toList());
     }
 
 
-    public static List<Employee> findByBirthDate(String birthDate,EmployeeService employeeService){
+    public static List<Employee> findByBirthDate(String birthDate){
         return employeeService.findAllEmployees().stream()
                 .filter(employee -> employee.getBirthDate().equals(Helpers.strToDate(birthDate)))
                 .collect(Collectors.toList());
     }
 
-    public static List<Employee> findByRcrtmntDate(String rcrtmntDate,EmployeeService employeeService){
+    public static List<Employee> findByRcrtmntDate(String rcrtmntDate){
         return employeeService.findAllEmployees().stream()
                 .filter(employee -> employee.getRcrtmntDate().equals(Helpers.strToDate(rcrtmntDate)))
                 .collect(Collectors.toList());

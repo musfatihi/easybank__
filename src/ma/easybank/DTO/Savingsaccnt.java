@@ -4,13 +4,13 @@ import java.time.LocalDate;
 
 public class Savingsaccnt extends Account{
 
-    private float interestrate;
+    private double interestrate;
 
     public Savingsaccnt(){
 
     }
 
-    public Savingsaccnt(Employee employee,Client client,float interestrate){
+    public Savingsaccnt(Employee employee,Client client,double interestrate){
 
         super(employee,client);
         this.interestrate = interestrate;
@@ -27,7 +27,7 @@ public class Savingsaccnt extends Account{
 
     }
 
-    public float getInterestrate() {
+    public double getInterestrate() {
         return interestrate;
     }
 
