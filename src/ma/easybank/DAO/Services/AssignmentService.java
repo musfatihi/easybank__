@@ -20,7 +20,7 @@ public class AssignmentService {
 
     private static final String DELETE_ASSIGNMENT = "update assignments set enddate=? where id=?";
 
-    private static final String FIND_ASSIGNMENTS_EMPLOYEE = "select missions.name,missions.description,assignments.startdate,assignments.enddate from assignments inner join missions on assignments.msncode=missions.code where empmtrcl=? order by startdate desc";
+    private static final String FIND_ASSIGNMENTS_EMPLOYEE = "select missions.code,missions.name,missions.description,assignments.startdate,assignments.enddate from assignments inner join missions on assignments.msncode=missions.code where empmtrcl=? order by startdate desc";
 
     private static final String GET_STATS = "select count(*) from assignments";
 
@@ -99,10 +99,10 @@ public class AssignmentService {
 
             while (resultSet.next()) {
 
-                if(resultSet.getDate(4)!=null){
-                    assignment = new Assignment(new Mission(resultSet.getString(1),resultSet.getString(2)),employee,resultSet.getDate(3).toLocalDate(),resultSet.getDate(4).toLocalDate());
+                if(resultSet.getDate(5)!=null){
+                    assignment = new Assignment(new Mission(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3)),employee,resultSet.getDate(4).toLocalDate(),resultSet.getDate(5).toLocalDate());
                 }else{
-                    assignment = new Assignment(new Mission(resultSet.getString(1),resultSet.getString(2)),employee,resultSet.getDate(3).toLocalDate());
+                    assignment = new Assignment(new Mission(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3)),employee,resultSet.getDate(4).toLocalDate());
                 }
 
                 assignments.add(assignment);

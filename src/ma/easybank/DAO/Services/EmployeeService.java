@@ -53,9 +53,10 @@ public class EmployeeService {
 
             ResultSet resultSet = stmt.executeQuery();
 
-            while(resultSet.next()) {
-                employee.setMtrcltNbr(resultSet.getInt(1));
-            }
+            resultSet.next();
+
+            employee.setMtrcltNbr(resultSet.getInt(1));
+
 
         } catch (Exception e) {
             System.out.println(e);
@@ -135,13 +136,12 @@ public class EmployeeService {
 
             ResultSet resultSet = stmt.executeQuery();
 
-            while (resultSet.next()) {
+            resultSet.next();
 
-                Employee employee = new Employee(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3),resultSet.getDate(4).toLocalDate(),resultSet.getString(5),resultSet.getString(6),resultSet.getDate(7).toLocalDate(),resultSet.getString(8));
+            Employee employee = new Employee(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3),resultSet.getDate(4).toLocalDate(),resultSet.getString(5),resultSet.getString(6),resultSet.getDate(7).toLocalDate(),resultSet.getString(8));
 
-                return Optional.of(employee);
+            return Optional.of(employee);
 
-            }
 
         }
         catch(Exception e){

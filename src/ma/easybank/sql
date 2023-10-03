@@ -1,0 +1,181 @@
+-- Database: EasyBank
+
+-- DROP DATABASE IF EXISTS "EasyBank";
+
+CREATE DATABASE "EasyBank"
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'French_France.1252'
+    LC_CTYPE = 'French_France.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+
+    -- Table: public.employees
+
+    -- DROP TABLE IF EXISTS public.employees;
+
+    CREATE TABLE IF NOT EXISTS public.employees
+    (
+        mtrcltnbr bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+        firstname character varying COLLATE pg_catalog."default",
+        lastname character varying COLLATE pg_catalog."default",
+        birthdate date,
+        address character varying COLLATE pg_catalog."default",
+        phonenumber character varying COLLATE pg_catalog."default",
+        rcrtmntdate date,
+        mailaddress character varying COLLATE pg_catalog."default",
+        deleted boolean DEFAULT false,
+        CONSTRAINT "Employees_pkey" PRIMARY KEY (mtrcltnbr)
+    )
+
+    TABLESPACE pg_default;
+
+    ALTER TABLE IF EXISTS public.employees
+        OWNER to postgres;
+
+
+    -- Table: public.clients
+
+    -- DROP TABLE IF EXISTS public.clients;
+
+    CREATE TABLE IF NOT EXISTS public.clients
+    (
+        code bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+        firstname character varying COLLATE pg_catalog."default",
+        lastname character varying COLLATE pg_catalog."default",
+        birthdate date,
+        address character varying COLLATE pg_catalog."default",
+        phonenumber character varying COLLATE pg_catalog."default",
+        deleted boolean DEFAULT false,
+        CONSTRAINT clients_pkey PRIMARY KEY (code)
+    )
+
+    TABLESPACE pg_default;
+
+    ALTER TABLE IF EXISTS public.clients
+        OWNER to postgres;
+
+
+
+    -- Table: public.accounts
+
+    -- DROP TABLE IF EXISTS public.accounts;
+
+    CREATE TABLE IF NOT EXISTS public.accounts
+    (
+        nbr bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+        balance double precision NOT NULL DEFAULT 0,
+        crtndate date NOT NULL DEFAULT CURRENT_DATE,
+        state character varying COLLATE pg_catalog."default" NOT NULL DEFAULT 'Active'::character varying,
+        idclient bigint NOT NULL,
+        createdby bigint NOT NULL,
+        deleted boolean DEFAULT false,
+        CONSTRAINT account_pkey PRIMARY KEY (nbr),
+        CONSTRAINT fk_client FOREIGN KEY (idclient)
+            REFERENCES public.clients (code) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            NOT VALID,
+        CONSTRAINT fk_employee FOREIGN KEY (createdby)
+            REFERENCES public.employees (mtrcltnbr) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            NOT VALID
+    )
+
+    TABLESPACE pg_default;
+
+    ALTER TABLE IF EXISTS public.accounts
+        OWNER to postgres;
+
+
+    -- Table: public.currentaccnt
+
+    -- DROP TABLE IF EXISTS public.currentaccnt;
+
+    CREATE TABLE IF NOT EXISTS public.currentaccnt
+    (
+        accnbr bigint NOT NULL,
+        overdraft real DEFAULT 0,
+        CONSTRAINT pk_currentaccnt PRIMARY KEY (accnbr),
+        CONSTRAINT fk_account FOREIGN KEY (accnbr)
+            REFERENCES public.accounts (nbr) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+    )
+
+    TABLESPACE pg_default;
+
+    ALTER TABLE IF EXISTS public.currentaccnt
+        OWNER to postgres;
+
+    -- Table: public.savingsaccnt
+
+    -- DROP TABLE IF EXISTS public.savingsaccnt;
+
+    CREATE TABLE IF NOT EXISTS public.savingsaccnt
+    (
+        accnbr bigint NOT NULL,
+        interestrate real NOT NULL DEFAULT 0,
+        CONSTRAINT pk_savingsaccnt PRIMARY KEY (accnbr),
+        CONSTRAINT fk_account FOREIGN KEY (accnbr)
+            REFERENCES public.accounts (nbr) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+    )
+
+    TABLESPACE pg_default;
+
+    ALTER TABLE IF EXISTS public.savingsaccnt
+        OWNER to postgres;
+
+    -- Table: public.savingsaccnt
+
+    -- DROP TABLE IF EXISTS public.savingsaccnt;
+
+    CREATE TABLE IF NOT EXISTS public.savingsaccnt
+    (
+        accnbr bigint NOT NULL,
+        interestrate real NOT NULL DEFAULT 0,
+        CONSTRAINT pk_savingsaccnt PRIMARY KEY (accnbr),
+        CONSTRAINT fk_account FOREIGN KEY (accnbr)
+            REFERENCES public.accounts (nbr) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+    )
+
+    TABLESPACE pg_default;
+
+    ALTER TABLE IF EXISTS public.savingsaccnt
+        OWNER to postgres;
+
+    -- Table: public.assignments
+
+    -- DROP TABLE IF EXISTS public.assignments;
+
+    CREATE TABLE IF NOT EXISTS public.assignments
+    (
+        id bigint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 9223372036854775807 CACHE 1 ),
+        msncode bigint NOT NULL,
+        empmtrcl bigint NOT NULL,
+        startdate date NOT NULL DEFAULT CURRENT_DATE,
+        enddate date,
+        CONSTRAINT assignments_pkey PRIMARY KEY (id),
+        CONSTRAINT fk_employee FOREIGN KEY (empmtrcl)
+            REFERENCES public.employees (mtrcltnbr) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            NOT VALID,
+        CONSTRAINT fk_mission FOREIGN KEY (msncode)
+            REFERENCES public.missions (code) MATCH SIMPLE
+            ON UPDATE NO ACTION
+            ON DELETE NO ACTION
+            NOT VALID
+    )
+
+    TABLESPACE pg_default;
+
+    ALTER TABLE IF EXISTS public.assignments
+        OWNER to postgres;

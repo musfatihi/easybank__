@@ -50,10 +50,8 @@ public class AccountDAOImpl implements AccountDAO {
                         account -> {
                             if (account.getState().toString().equals("Active")) {
                                 return "Active";
-                            } else if (account.getState().toString().equals("Blocked")) {
-                                return "Blocked";
                             } else {
-                                return "Deleted";
+                                return "Blocked";
                             }
                         }
                 ));
@@ -64,10 +62,8 @@ public class AccountDAOImpl implements AccountDAO {
                         account -> {
                             if (account.getState().toString().equals("Active")) {
                                 return "Active";
-                            } else if (account.getState().toString().equals("Blocked")) {
-                                return "Blocked";
                             } else {
-                                return "Deleted";
+                                return "Blocked";
                             }
                         }
                 ));

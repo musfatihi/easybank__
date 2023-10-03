@@ -20,8 +20,4 @@ public class CurrentaccntDAOImpl implements CurrentaccntDAO {
         return currentaccntService.saveCurrentaccnt(currentaccnt);
     }
 
-    @Override
-    public List<Currentaccnt> findBy(Client client) {
-        return null;
-    }
 }

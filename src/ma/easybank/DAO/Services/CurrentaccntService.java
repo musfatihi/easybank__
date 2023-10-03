@@ -17,7 +17,7 @@ public class CurrentaccntService {
     private static final String CHECK_ACCOUNT_WITHDRAWAL = "select count(*) from currentaccnt \n" +
             "left join accounts \n" +
             "on accounts.nbr=currentaccnt.accnbr \n" +
-            "where accounts.nbr=? and accounts.state='Active' and accounts.balance-?>-currentaccnt.overdraft";
+            "where accounts.nbr=? and accounts.state='Active' and accounts.balance-?>=-currentaccnt.overdraft";
 
 
     public CurrentaccntService(Connection connection){
@@ -39,12 +39,12 @@ public class CurrentaccntService {
 
             ResultSet resultSet = stmt.executeQuery();
 
-            while(resultSet.next()){
-                currentaccnt.setBalance(0);
-                currentaccnt.setState(State.Active);
-                currentaccnt.setNbr(resultSet.getInt(1));
-                currentaccnt.setCrtnDate(LocalDate.now());
-            }
+            resultSet.next();
+
+            currentaccnt.setBalance(0);
+            currentaccnt.setState(State.Active);
+            currentaccnt.setNbr(resultSet.getInt(1));
+            currentaccnt.setCrtnDate(LocalDate.now());
 
         } catch (Exception e) {
 

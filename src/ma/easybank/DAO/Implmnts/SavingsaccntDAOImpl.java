@@ -20,8 +20,4 @@ public class SavingsaccntDAOImpl implements SavingsaccntDAO {
         return savingsaccntService.saveSavingsaccnt(savingsaccnt);
     }
 
-    @Override
-    public List<Savingsaccnt> findBy(Client client) {
-        return null;
-    }
 }

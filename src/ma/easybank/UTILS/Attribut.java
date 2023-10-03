@@ -11,7 +11,7 @@ import ma.easybank.DTO.Mission;
 
 public class Attribut {
     private String name;
-    private Boolean isMandatory=false;
+    private Boolean isMandatory=true;
     private String type="string";
 
 

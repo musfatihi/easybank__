@@ -16,7 +16,7 @@ public class OperationService {
 
     private static final String DELETE_OPERATION = "update operations set deleted=true where nbr=?";
 
-    private static final String FIND_OPERATION_NBR = "select * from operations where nbr=?";
+    private static final String FIND_OPERATION_NBR = "select * from operations where nbr=? and deleted=false";
 
     private static final String FIND_ACCOUNT_OPR_NBR = "select accounts.* from operations inner join accounts on operations.accnbr=accounts.nbr where operations.nbr=? ";
 

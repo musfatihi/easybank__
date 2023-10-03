@@ -95,7 +95,7 @@ public class Assignment {
 
     @Override
     public String toString() {
-        return "Mission : "+this.mission.getName()+"\n"+"Opérateur : "+this.employee.getMtrcltNbr()+"\n"+
+        return "Mission : "+this.mission.getCode()+"\n"+"Opérateur : "+this.employee.getMtrcltNbr()+"\n"+
                 "Du : "+ Helpers.localDateToStr(this.startDate)+"\n"+"Au : "+(this.endDate!=null?Helpers.localDateToStr(this.endDate):"--")+"\n";
 
     }

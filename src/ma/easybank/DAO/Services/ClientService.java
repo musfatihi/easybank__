@@ -50,11 +50,9 @@ public class ClientService {
 
             ResultSet resultSet = stmt.executeQuery();
 
-            while(resultSet.next()){
+            resultSet.next();
 
-                client.setCode(resultSet.getInt(1));
-
-            }
+            client.setCode(resultSet.getInt(1));
 
         } catch (Exception e) {
 
@@ -135,13 +133,12 @@ public class ClientService {
 
             ResultSet resultSet = stmt.executeQuery();
 
-            while (resultSet.next()) {
+            resultSet.next();
 
-                Client client = new Client(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3),resultSet.getDate(4).toLocalDate(),resultSet.getString(5),resultSet.getString(6));
+            Client client = new Client(resultSet.getInt(1),resultSet.getString(2),resultSet.getString(3),resultSet.getDate(4).toLocalDate(),resultSet.getString(5),resultSet.getString(6));
 
-                return Optional.of(client);
+            return Optional.of(client);
 
-            }
 
         }
         catch(Exception e){

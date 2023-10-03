@@ -9,6 +9,4 @@ public interface SavingsaccntDAO {
 
     Savingsaccnt save(Savingsaccnt savingsaccnt);
 
-    List<Savingsaccnt> findBy(Client client);
-
 }

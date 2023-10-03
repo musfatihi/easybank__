@@ -42,12 +42,12 @@ public class SavingsaccntService {
 
             ResultSet resultSet = stmt.executeQuery();
 
-            while(resultSet.next()){
-                savingsaccnt.setBalance(0);
-                savingsaccnt.setCrtnDate(LocalDate.now());
-                savingsaccnt.setState(State.Active);
-                savingsaccnt.setNbr(resultSet.getInt(1));
-            }
+            resultSet.next();
+
+            savingsaccnt.setBalance(0);
+            savingsaccnt.setCrtnDate(LocalDate.now());
+            savingsaccnt.setState(State.Active);
+            savingsaccnt.setNbr(resultSet.getInt(1));
 
         } catch (Exception e) {
             System.out.println(e);

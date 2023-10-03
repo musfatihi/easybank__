@@ -88,6 +88,6 @@ public class Employee extends Person{
 
     @Override
     public String toString() {
-        return super.toString()+"Immatricul : "+this.mtrcltNbr+"\n"+"Date de recrutement : "+ Helpers.localDateToStr(this.rcrtmntDate)+"\n"+"Adresse mail: "+this.mailAddress+"\n";
+        return super.toString()+"matricule : "+this.mtrcltNbr+"\n"+"Date de recrutement : "+ Helpers.localDateToStr(this.rcrtmntDate)+"\n"+"Adresse mail: "+this.mailAddress+"\n";
     }
 }

@@ -11,7 +11,7 @@ import java.util.*;
 
 public class App {
 
-    public static String[] options = {
+    private static String[] options = {
             "Ajouter un employé",
             "Supprimer un employé",
             "Chercher un employé",
@@ -45,27 +45,29 @@ public class App {
             "Afficher les statistiques"
     };
 
-    public static Connection connection;
 
 
-    public static EmployeeService employeeService;
-    public static ClientService clientService;
-    public static AccountService accountService;
-    public static CurrentaccntService currentaccntService;
-    public static SavingsaccntService savingsaccntService;
-    public static OperationService operationService;
-    public static MissionService missionService;
-    public static AssignmentService assignmentService;
+    //------------------------------Services-------------------------
+
+    private static EmployeeService employeeService;
+    private static ClientService clientService;
+    private static AccountService accountService;
+    private static CurrentaccntService currentaccntService;
+    private static SavingsaccntService savingsaccntService;
+    private static OperationService operationService;
+    private static MissionService missionService;
+    private static AssignmentService assignmentService;
 
 
-    public static EmployeeDAOImpl employeeDAO;
-    public static ClientDAOImpl clientDAO;
-    public static CurrentaccntDAOImpl currentaccntDAO;
-    public static SavingsaccntDAOImpl savingsaccntDAO;
-    public static AccountDAOImpl accountDAO;
-    public static OperationDAOImpl operationDAO;
-    public static MissionDAOImpl missionDAO;
-    public static AssignmentDAOImpl assignmentDAO;
+    //----------------------------------DAOs---------------------------------------
+    private static EmployeeDAOImpl employeeDAO;
+    private static ClientDAOImpl clientDAO;
+    private static CurrentaccntDAOImpl currentaccntDAO;
+    private static SavingsaccntDAOImpl savingsaccntDAO;
+    private static AccountDAOImpl accountDAO;
+    private static OperationDAOImpl operationDAO;
+    private static MissionDAOImpl missionDAO;
+    private static AssignmentDAOImpl assignmentDAO;
 
 
     public static void start(){
@@ -73,7 +75,7 @@ public class App {
 
         //-----------------Connection to DB-----------
 
-        connection = DBConnection.makeConnection();
+        Connection connection = DBConnection.makeConnection();
 
         //-----------------Services---------------------
 
@@ -93,9 +95,6 @@ public class App {
 
         assignmentService = new AssignmentService(connection);
 
-
-
-
         //-------------------DAOs----------------------------
 
         employeeDAO = new EmployeeDAOImpl(employeeService);
@@ -114,9 +113,19 @@ public class App {
 
         assignmentDAO = new AssignmentDAOImpl(assignmentService);
 
+        while(true){
+
+            showOptions(options);
+
+            int option = takeInput(1, options.length);
+
+            treatement(option);
+
+        }
+
     }
 
-    public static void showOptions(String[] options){
+    private static void showOptions(String[] options){
         int i=1;
         for (String option : options) {
             System.out.println(i+" "+option);
@@ -125,7 +134,7 @@ public class App {
     }
 
     // Asking for Input as Choice
-    public static int takeInput(int min, int max) {
+    private static int takeInput(int min, int max) {
         String choice;
         Scanner input = new Scanner(System.in);
 
@@ -149,7 +158,7 @@ public class App {
 
     }
 
-    public static void treatement(int option){
+    private static void treatement(int option){
 
         switch(option) {
             case 1:
@@ -259,7 +268,7 @@ public class App {
 
         System.out.println("----------------------Ajout d'un Employe--------------------------");
 
-        String[] fields = {"Prenom", "Nom", "Date de naissance", "Adresse", "N° Tel","Date de recrutement","Adresse Mail"};
+        String[] fields = {"Prenom", "Nom", "Date de naissance", "Adresse", "N Tel","Date de recrutement","Adresse Mail"};
 
         List<Attribut> attributs = new ArrayList<>();
 
@@ -267,13 +276,13 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Prenom") || field.equals("Nom") || field.equals("Adresse") || field.equals("Adresse Mail")){
-                attribut.setMandatory();
-            }
 
             if(field.equals("Date de naissance") || field.equals("Date de recrutement")){
                 attribut.setType("date");
-                attribut.setMandatory();
+            }
+
+            if(field.equals("N tel")){
+                attribut.setType("tel");
             }
 
             attributs.add(attribut);
@@ -283,7 +292,9 @@ public class App {
         HashMap<String,String> filledFields = takeInfos(attributs);
 
         Employee employee = new Employee(filledFields.get("Prenom"),filledFields.get("Nom"), Helpers.strToDate(filledFields.get("Date de naissance")),filledFields.get("Adresse"),
-                filledFields.get("N° Tel"),Helpers.strToDate(filledFields.get("Date de recrutement")),filledFields.get("Adresse Mail"));
+                filledFields.get("N Tel"),Helpers.strToDate(filledFields.get("Date de recrutement")),filledFields.get("Adresse Mail"));
+
+        Helpers.displaySuccessMsg("Employé ajouté avec succès");
 
         displayEmployee(employeeDAO.save(employee));
 
@@ -305,7 +316,6 @@ public class App {
 
             if(field.equals("Matricule")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -320,7 +330,7 @@ public class App {
         if(employeeDAO.delete(employee)){
             Helpers.displaySuccessMsg("Employé supprimé avec succès");
         }else{
-            Helpers.displayErrorMsg("Aucun Employé avec ce matricule");
+            Helpers.displayErrorMsg("Error!!");
         }
 
         System.out.println("----------------------------------------------------------------------------");
@@ -342,7 +352,6 @@ public class App {
 
             if(field.equals("Matricule")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -356,7 +365,7 @@ public class App {
         if(employeeDAO.findBy(employee).isPresent()){
             displayEmployee(employeeDAO.findBy(employee).get());
         }else{
-            Helpers.displayErrorMsg("Aucun employé avec ce matricule!!");
+            Helpers.displayErrorMsg("Error!!");
         }
 
         System.out.println("--------------------------------------------------------------------");
@@ -426,10 +435,6 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Prenom")){
-                attribut.setMandatory();
-            }
-
             attributs.add(attribut);
 
         }
@@ -455,10 +460,6 @@ public class App {
         for (String field:fields) {
 
             Attribut attribut = new Attribut(field);
-
-            if(field.equals("Nom")){
-                attribut.setMandatory();
-            }
 
             attributs.add(attribut);
 
@@ -486,10 +487,6 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Adresse")){
-                attribut.setMandatory();
-            }
-
             attributs.add(attribut);
 
         }
@@ -515,10 +512,6 @@ public class App {
         for (String field:fields) {
 
             Attribut attribut = new Attribut(field);
-
-            if(field.equals("N TEL")){
-                attribut.setMandatory();
-            }
 
             attributs.add(attribut);
 
@@ -547,7 +540,7 @@ public class App {
             Attribut attribut = new Attribut(field);
 
             if(field.equals("E-MAIL")){
-                attribut.setMandatory();
+                attribut.setType("mail");
             }
 
             attributs.add(attribut);
@@ -578,7 +571,6 @@ public class App {
             Attribut attribut = new Attribut(field);
 
             if(field.equals("Date de naissance")){
-                attribut.setMandatory();
                 attribut.setType("date");
             }
 
@@ -602,14 +594,11 @@ public class App {
 
         List<Attribut> attributs = new ArrayList<>();
 
-        //Objects Creation
-
         for (String field:fields) {
 
             Attribut attribut = new Attribut(field);
 
             if(field.equals("Date de recrutement")){
-                attribut.setMandatory();
                 attribut.setType("date");
             }
 
@@ -629,7 +618,7 @@ public class App {
 
         System.out.println("----------------------Modification d'un Employe--------------------------");
 
-        String[] fields = {"Matricule","Prenom", "Nom", "Date de naissance", "Adresse", "N° Tel","Date de recrutement","Adresse Mail"};
+        String[] fields = {"Matricule","Prenom", "Nom", "Date de naissance", "Adresse", "N Tel","Date de recrutement","Adresse Mail"};
 
         List<Attribut> attributs = new ArrayList<>();
 
@@ -639,18 +628,19 @@ public class App {
 
             if(field.equals("Matricule")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
-            if(field.equals("Prenom") || field.equals("Nom") || field.equals("Adresse") || field.equals("Adresse Mail")){
-                attribut.setMandatory();
+            if(field.equals("N Tel")){
+                attribut.setType("tel");
+            }
+
+            if(field.equals("Adresse Mail")){
+                attribut.setType("mail");
             }
 
             if(field.equals("Date de naissance") || field.equals("Date de recrutement")){
                 attribut.setType("date");
-                attribut.setMandatory();
             }
-
 
             attributs.add(attribut);
 
@@ -659,9 +649,11 @@ public class App {
         HashMap<String,String> filledFields = takeInfos(attributs);
 
         Employee employee = new Employee(Integer.valueOf(filledFields.get("Matricule")),filledFields.get("Prenom"),filledFields.get("Nom"), Helpers.strToDate(filledFields.get("Date de naissance")),filledFields.get("Adresse"),
-                filledFields.get("N° Tel"),Helpers.strToDate(filledFields.get("Date de recrutement")),filledFields.get("Adresse Mail"));
+                filledFields.get("N Tel"),Helpers.strToDate(filledFields.get("Date de recrutement")),filledFields.get("Adresse Mail"));
 
         displayEmployee(employeeDAO.update(employee));
+
+        Helpers.displaySuccessMsg("Employé modifié avec succès");
 
         System.out.println("--------------------------------------------------------------------");
 
@@ -678,7 +670,7 @@ public class App {
 
         System.out.println("----------------------Ajout d'un Client--------------------------");
 
-        String[] fields = {"Prenom", "Nom", "Date de naissance", "Adresse", "N° Tel"};
+        String[] fields = {"Prenom", "Nom", "Date de naissance", "Adresse", "N Tel"};
 
         List<Attribut> attributs = new ArrayList<>();
 
@@ -687,17 +679,13 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Prenom") || fields.equals("Nom") || fields.equals("Adresse")){
-                attribut.setMandatory();
-            }
 
-            if(field.equals("N° Tel")){
-                attribut.setMandatory();
+            if(field.equals("N Tel")){
+                attribut.setType("tel");
             }
 
             if(field.equals("Date de naissance")){
                 attribut.setType("date");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -707,8 +695,9 @@ public class App {
         HashMap<String,String> filledFields = takeInfos(attributs);
 
         Client client = new Client(filledFields.get("Prenom"),filledFields.get("Nom"), Helpers.strToDate(filledFields.get("Date de naissance")),filledFields.get("Adresse"),
-                filledFields.get("N° Tel"));
+                filledFields.get("N Tel"));
 
+        Helpers.displaySuccessMsg("Client ajouté avec succès");
         displayClient(clientDAO.save(client));
 
         System.out.println("--------------------------------------------------------------------");
@@ -719,7 +708,7 @@ public class App {
 
         System.out.println("----------------------Modification d'un Client--------------------------");
 
-        String[] fields = {"Code","Prenom", "Nom", "Date de naissance", "Adresse", "N° Tel"};
+        String[] fields = {"Code","Prenom", "Nom", "Date de naissance", "Adresse", "N Tel"};
 
         List<Attribut> attributs = new ArrayList<>();
 
@@ -730,20 +719,14 @@ public class App {
 
             if(field.equals("Code")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
-            if(field.equals("Prenom") || fields.equals("Nom") || fields.equals("Adresse")){
-                attribut.setMandatory();
-            }
-
-            if(field.equals("N° Tel")){
-                attribut.setMandatory();
+            if(field.equals("N Tel")){
+                attribut.setType("tel");
             }
 
             if(field.equals("Date de naissance")){
                 attribut.setType("date");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -753,9 +736,10 @@ public class App {
         HashMap<String,String> filledFields = takeInfos(attributs);
 
         Client client = new Client(Integer.valueOf(filledFields.get("Code")),filledFields.get("Prenom"),filledFields.get("Nom"), Helpers.strToDate(filledFields.get("Date de naissance")),filledFields.get("Adresse"),
-                filledFields.get("N° Tel"));
+                filledFields.get("N Tel"));
 
         displayClient(clientDAO.update(client));
+        Helpers.displaySuccessMsg("Client modifié avec succès");
 
         System.out.println("--------------------------------------------------------------------");
 
@@ -775,7 +759,6 @@ public class App {
 
             if(field.equals("Code")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -789,7 +772,7 @@ public class App {
         if(clientDAO.delete(client)){
             Helpers.displaySuccessMsg("Client supprimé avec succès");
         }else{
-            Helpers.displayErrorMsg("Aucun client avec ce code!!");
+            Helpers.displayErrorMsg("Error!!");
         }
 
         System.out.println("--------------------------------------------------------------------");
@@ -810,7 +793,6 @@ public class App {
 
             if(field.equals("Code")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -825,7 +807,7 @@ public class App {
         if(clientDAO.findBy(client).isPresent()){
             displayClient(clientDAO.findBy(client).get());
         }else{
-            Helpers.displayErrorMsg("Aucun client avec ce code!!");
+            Helpers.displayErrorMsg("Error!!");
         }
 
         System.out.println("--------------------------------------------------------------------");
@@ -891,10 +873,6 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Prenom")){
-                attribut.setMandatory();
-            }
-
             attributs.add(attribut);
 
         }
@@ -916,10 +894,6 @@ public class App {
         for (String field:fields) {
 
             Attribut attribut = new Attribut(field);
-
-            if(field.equals("Nom")){
-                attribut.setMandatory();
-            }
 
             attributs.add(attribut);
 
@@ -943,10 +917,6 @@ public class App {
         for (String field:fields) {
 
             Attribut attribut = new Attribut(field);
-
-            if(field.equals("Adresse")){
-                attribut.setMandatory();
-            }
 
             attributs.add(attribut);
 
@@ -972,7 +942,7 @@ public class App {
             Attribut attribut = new Attribut(field);
 
             if(field.equals("N Tel")){
-                attribut.setMandatory();
+                attribut.setType("tel");
             }
 
             attributs.add(attribut);
@@ -1000,7 +970,6 @@ public class App {
             Attribut attribut = new Attribut(field);
 
             if(field.equals("Date de naissance")){
-                attribut.setMandatory();
                 attribut.setType("date");
             }
 
@@ -1047,7 +1016,6 @@ public class App {
 
             if(field.equals("Code") || field.equals("Matricule")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -1072,6 +1040,7 @@ public class App {
 
             Currentaccnt currentaccnt = new Currentaccnt(new Employee(Integer.valueOf(filledFields.get("Matricule"))),new Client(Integer.valueOf(filledFields.get("Code"))),Double.parseDouble(filedFields.get("Decouvert")));
 
+            Helpers.displaySuccessMsg("Compte courant créé avec succès");
             displayAccount(currentaccntDAO.save(currentaccnt));
 
         }else{
@@ -1090,6 +1059,7 @@ public class App {
 
             Savingsaccnt savingsaccnt = new Savingsaccnt(new Employee(Integer.valueOf(filledFields.get("Matricule"))),new Client(Integer.valueOf(filledFields.get("Code"))),Double.parseDouble(filedFields.get("Taux d'interet")));
 
+            Helpers.displaySuccessMsg("Compte d'epargne créé avec succès");
             displayAccount(savingsaccntDAO.save(savingsaccnt));
 
         }
@@ -1112,7 +1082,6 @@ public class App {
 
             if(field.equals("Numero de compte")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -1126,13 +1095,12 @@ public class App {
         if(accountDAO.delete(account)){
             Helpers.displaySuccessMsg("Compte supprimé avec succès");
         }else{
-            Helpers.displayErrorMsg("Aucun compte trouvé!!");
+            Helpers.displayErrorMsg("Error!!");
         }
 
         System.out.println("--------------------------------------------------------------------");
 
     }
-
 
     public static void findAccountsByClient(){
 
@@ -1148,7 +1116,6 @@ public class App {
 
             if(field.equals("Code")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -1199,11 +1166,9 @@ public class App {
 
             if(field.equals("Numero de compte")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
             if(field.equals("Active or Blocked")){
                 attribut.setType("state");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -1218,7 +1183,7 @@ public class App {
         {
             Helpers.displaySuccessMsg("L'état de compte a été modifié avec succès");
         }else{
-            Helpers.displayErrorMsg("Aucun compte avec ce numèro!!");
+            Helpers.displayErrorMsg("Error!!");
         }
 
         System.out.println("--------------------------------------------------------------------");
@@ -1239,10 +1204,6 @@ public class App {
         System.out.println("----------------------------------Comptes Bloqués------------------------------");
 
         displayAccounts(accounts.get("Blocked"));
-
-        System.out.println("----------------------------------Comptes Supprimés-----------------------------");
-
-        displayAccounts(accounts.get("Deleted"));
 
         System.out.println("---------------------------------------------------------------------------------");
 
@@ -1286,7 +1247,6 @@ public class App {
 
             if(field.equals("Numero d'operation")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -1326,10 +1286,6 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Matricule") || field.equals("Numero de compte")
-                    || field.equals("Type d'operation") || field.equals("Montant")){
-                attribut.setMandatory();
-            }
 
             if(field.equals("Matricule") || field.equals("Numero de compte")){
                 attribut.setType("number");
@@ -1358,7 +1314,7 @@ public class App {
                 displayOperation(operationDAO.save(operation));
                 Helpers.displaySuccessMsg("Opération réussie");
             }else{
-                Helpers.displayErrorMsg("Opération est impossible!!");
+                Helpers.displayErrorMsg("Opération non permise!!");
             }
 
         }else{
@@ -1386,7 +1342,6 @@ public class App {
 
             if(field.equals("Numéro d'opération")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -1400,7 +1355,7 @@ public class App {
         if(operationDAO.delete(operation)){
             Helpers.displaySuccessMsg("Opération supprimé avec succès");
         }else{
-            Helpers.displayErrorMsg("Aucune Opération trouvée!!");
+            Helpers.displayErrorMsg("Error!!");
         }
 
         System.out.println("--------------------------------------------------------------------");
@@ -1424,7 +1379,6 @@ public class App {
 
             if(field.equals("Numero d'operation")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -1468,10 +1422,6 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Nom")){
-                attribut.setMandatory();
-            }
-
             attributs.add(attribut);
 
         }
@@ -1481,6 +1431,7 @@ public class App {
         Mission mission = new Mission(filledFields.get("Nom"),filledFields.get("Description"));
 
         displayMission(missionDAO.save(mission));
+        Helpers.displaySuccessMsg("Mission ajoutée avec succès");
 
         System.out.println("--------------------------------------------------------------------");
 
@@ -1491,7 +1442,7 @@ public class App {
 
         System.out.println("----------------------Supprimer une mission--------------------------");
 
-        String[] fields = {"Code"};
+        String[] fields = {"Code mission"};
 
         List<Attribut> attributs = new ArrayList<>();
 
@@ -1499,8 +1450,7 @@ public class App {
 
             Attribut attribut = new Attribut(field);
 
-            if(field.equals("Code")){
-                attribut.setMandatory();
+            if(field.equals("Code mission")){
                 attribut.setType("number");
             }
 
@@ -1510,16 +1460,13 @@ public class App {
 
         HashMap<String,String> filledFields = takeInfos(attributs);
 
-        Mission mission = new Mission(Integer.valueOf(filledFields.get("Code")));
+        Mission mission = new Mission(Integer.valueOf(filledFields.get("Code mission")));
 
         if(missionDAO.delete(mission))
         {
-            Helpers.displaySuccessMsg("Mission supprimé avec succès");
-
+            Helpers.displaySuccessMsg("Mission supprimée avec succès");
         }else{
-
-            Helpers.displayErrorMsg("Opération a echoué");
-
+            Helpers.displayErrorMsg("Error");
         }
 
         System.out.println("--------------------------------------------------------------------");
@@ -1549,7 +1496,6 @@ public class App {
             Attribut attribut = new Attribut(field);
 
             if(field.equals("Code mission") || field.equals("Matricule")){
-                attribut.setMandatory();
                 attribut.setType("number");
             }
 
@@ -1562,6 +1508,7 @@ public class App {
         Assignment assignment = new Assignment(new Mission(Integer.parseInt(filledFields.get("Code mission"))),new Employee(Integer.parseInt(filledFields.get("Matricule"))));
 
         displayAssignment(assignmentDAO.save(assignment));
+        Helpers.displaySuccessMsg("Affectation ajoutée avec succès");
 
         System.out.println("--------------------------------------------------------------------");
 
@@ -1581,7 +1528,6 @@ public class App {
             Attribut attribut = new Attribut(field);
 
             if(field.equals("Id Affectation")){
-                attribut.setMandatory();
                 attribut.setType("number");
             }
 
@@ -1617,7 +1563,6 @@ public class App {
 
             if(field.equals("Matricule")){
                 attribut.setType("number");
-                attribut.setMandatory();
             }
 
             attributs.add(attribut);
@@ -1695,7 +1640,8 @@ public class App {
                             (attribut.getName().equals("Matricule") && !attribut.employeeExists(new Employee(Integer.valueOf(input)))) ||
                             (attribut.getName().equals("Code") && !attribut.clientExists(new Client(Integer.valueOf(input)))) ||
                             (attribut.getName().equals("Numero de compte") && !attribut.accountExists(new Account(Integer.valueOf(input)))) ||
-                            (attribut.getName().equals("Code Mission") && !attribut.missionExists(new Mission(Integer.valueOf(input))))
+                            (attribut.getName().equals("Code mission") && !attribut.missionExists(new Mission(Integer.valueOf(input)))) ||
+                            (attribut.getType().equals("mail") && !Helpers.isValidEmail(input))
             );
 
 

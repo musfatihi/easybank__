@@ -5,6 +5,8 @@ import ma.easybank.DTO.Type;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Helpers {
@@ -151,6 +153,14 @@ public class Helpers {
         DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d/MM/uuuu");
         return localDate.format(formatters);
 
+    }
+
+
+    public static Boolean isValidEmail(String email) {
+        String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 
 }

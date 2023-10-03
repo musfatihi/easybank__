@@ -19,7 +19,7 @@ public class MissionService {
 
     private static final String FIND_ALL_MISSIONS = "select * from missions where deleted=false";
 
-    private static final String CHECK_MISSION = "select * from missions where code=? and deleted=false";
+    private static final String CHECK_MISSION = "select count(*) from missions where code=? and deleted=false";
 
 
 
@@ -41,9 +41,9 @@ public class MissionService {
 
             ResultSet resultSet = stmt.executeQuery();
 
-            while(resultSet.next()){
-                mission.setCode(resultSet.getInt(1));
-            }
+            resultSet.next();
+
+            mission.setCode(resultSet.getInt(1));
 
         } catch (Exception e) {
 
@@ -57,6 +57,7 @@ public class MissionService {
 
     //Mission Deletion
     public Boolean deleteMission(Mission mission){
+
 
         int rowsUpdated = 0;
 

@@ -10,6 +10,4 @@ public interface CurrentaccntDAO {
 
     Currentaccnt save(Currentaccnt currentaccnt);
 
-    List<Currentaccnt> findBy(Client client);
-
 }
